@@ -1,0 +1,1018 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* =========================
+       Primary
+       ========================= */
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+    --primary-light: #DBEAFE;
+    --primary-dark: #1E3A8A;
+
+    /* =========================
+       Secondary
+       ========================= */
+    --secondary: #64748B;
+    --secondary-hover: #475569;
+    --secondary-light: #F1F5F9;
+
+    /* =========================
+       Background
+       ========================= */
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-hover: #F1F5F9;
+
+    /* =========================
+       Gray
+       ========================= */
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-400: #94A3B8;
+    --gray-500: #64748B;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1E293B;
+    --gray-900: #0F172A;
+
+    /* =========================
+       Text
+       ========================= */
+    --text: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --text-white: #FFFFFF;
+
+    /* =========================
+       Border
+       ========================= */
+    --border: #ccc;
+    --border-hover: #353535;
+    --border-focus: #2563EB;
+
+    /* =========================
+       Success
+       ========================= */
+    --success: #16A34A;
+    --success-hover: #15803D;
+    --success-light: #DCFCE7;
+
+    /* =========================
+       Warning
+       ========================= */
+    --warning: #D97706;
+    --warning-hover: #B45309;
+    --warning-light: #FEF3C7;
+
+    /* =========================
+       Danger
+       ========================= */
+    --danger: #DC2626;
+    --danger-hover: #B91C1C;
+    --danger-light: #FEE2E2;
+
+    /* =========================
+       Info
+       ========================= */
+    --info: #0284C7;
+    --info-hover: #0369A1;
+    --info-light: #E0F2FE;
+
+    /* =========================
+       Shadow
+       ========================= */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.10);
+
+    /* =========================
+       Radius
+       ========================= */
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col-1-2 {
+    width: 50%;
+    padding: 4px;
+}
+
+.nav-header-content {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body {
+    background-color: var(--background);
+    font-family: 'Inter', sans-serif;
+    color: #222;
+}
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.nav-header {
+    background: #fff;
+    box-shadow: 0 0 3px 0 #ccc;
+    padding: 16px;
+}
+
+.nav-header ul {
+    list-style: none;
+}
+
+.nav-list {
+    padding: 0;
+    margin: 0;
+}
+
+.nav-header .nav-list .nav-item {
+    display: inline-block;
+    margin-right: 16px;
+}
+
+.nav-header ul .nav-item .nav-link {
+    position: relative;
+    display: inline-block;
+
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: color 0.2s ease;
+}
+
+.nav-header .nav-list li .nav-link::after {
+    content: "";
+    position: absolute;
+
+    bottom: 0;
+
+    height: 2px;
+    transform-origin: left;
+    border-radius: 2px;
+
+    background: #1976d2;
+    width: 100%;
+    left: 0;
+    transform: scaleX(0) translateY(4px);
+    transition: transform 0.2s ease;
+}
+
+.nav-header .nav-list .nav-item .nav-link:hover {
+    color: #1976d2;
+}
+
+.nav-header .nav-list .nav-item .nav-link:hover::after {
+    transform: scaleX(1) translateY(4px);
+}
+
+.nav-header .last a {
+    color: #333;
+    text-decoration: none;
+}
+
+/* =========================================
+   DROPDOWN MENÜ (Masaüstü)
+   ========================================= */
+
+/* Dropdown'ın bulunduğu ana menü öğesi */
+#dropdown {
+    position: relative;
+    /* Alt menünün buna göre konumlanması için */
+}
+
+/* Alt menü listesi (Görünmezken) */
+.dropdown-nav-list {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    /* Ana linkin hemen altından başla */
+    left: 0;
+    min-width: 200px;
+    /* Metinlerin sığması için genişlik */
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Modern gölge */
+    border-radius: 6px;
+    padding: 8px 0;
+    /* Üstten ve alttan boşluk */
+    list-style: none;
+    z-index: 1000;
+
+    /* Animasyon */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+
+    /* İçeriği dikeyde hizala */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ana menü öğesinin üzerine gelince alt menüyü göster */
+#dropdown:hover .dropdown-nav-list {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Alt menüdeki her bir satır (li) */
+.nav-dropdown-item {
+    width: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+/* Alt menüdeki linkler (a) */
+.nav-dropdown-link {
+    display: block;
+    /* Tüm satırı kaplasın */
+    width: 100%;
+    padding: 10px 18px;
+    /* Rahat tıklama alanı */
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: nowrap;
+    /* Metin alt satıra kaymasın */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-nav-list li a:hover {
+    background: #ccc;
+    display: block;
+}
+
+.nav-menu,
+.drawer-menu-glass {
+    display: none;
+}
+
+.btn-login,
+.btn-register {
+    padding: 7px 18px;
+    border-radius: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Giriş Yap */
+.btn-login {
+    color: #333;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-right: 10px;
+}
+
+.btn-login:hover {
+    color: #333;
+    border-color: #555;
+    background-color: #f5f9ff;
+}
+
+/* Kayıt Ol */
+.btn-register {
+    color: #fff;
+    border: 1px solid #333;
+    background-color: #333;
+}
+
+.btn-register:hover {
+    background-color: #555;
+    border-color: #555;
+    box-shadow: 0 3px 8px rgba(25, 118, 210, 0.2);
+}
+
+/* =========================================
+   MOBİL MENÜ (Drawer)
+   ========================================= */
+
+@media screen and (max-width: 991px) {
+
+    .nav-list,
+    .nav-header-content {
+        display: none;
+    }
+
+    .nav-header {
+        padding: 12px 16px;
+    }
+
+    .nav-menu,
+    .drawer-menu-glass {
+        display: inline-block;
+    }
+
+    .nav-menu-button {
+        background: none;
+        outline: none;
+        border: 0;
+        cursor: pointer;
+        transform: translateY(2px);
+    }
+
+    .drawer-menu-glass {
+        background-color: rgba(0, 0, 0, 0.4);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        opacity: 1;
+        position: fixed;
+        transition: 0.8s;
+    }
+
+    .drawer-menu {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        /* Sola yapışık kalsın */
+        z-index: 3;
+        width: min(280px, 100%);
+        height: 100vh;
+        background: #fff;
+
+        /* left yerine transform kullanıyoruz */
+        transition: transform 0.3s ease;
+
+        /* Başlangıçta ekranın dışında olsun */
+        transform: translateX(0%);
+    }
+
+    .drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 18px 10px;
+
+        border-bottom: 1px solid #eee;
+    }
+
+    .drawer-title {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .drawer-close-button {
+        border: 0;
+        background: transparent;
+
+        font-size: 28px;
+        line-height: 1;
+
+        cursor: pointer;
+
+        color: #333;
+    }
+
+    .drawer-nav-list {
+        list-style: none;
+        padding: 10px 0;
+    }
+
+    .drawer-nav-item {
+        width: 100%;
+    }
+
+    .drawer-nav-link {
+        display: block;
+
+        padding: 14px 10px;
+
+        color: #333;
+        text-decoration: none;
+
+        font-size: 15px;
+        font-weight: 500;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .drawer-nav-link:hover {
+        background-color: #f5f5f5;
+        color: #1976d2;
+    }
+
+    /* Drawer dropdown */
+
+    .drawer-dropdown-list {
+        list-style: none;
+
+        background: #f8f8f8;
+    }
+
+    .drawer-dropdown-list li a {
+        display: block;
+
+        padding: 11px 20px 11px 40px;
+
+        color: #555;
+        text-decoration: none;
+
+        font-size: 14px;
+
+        transition: background-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .drawer-dropdown-list li a:hover {
+        background-color: #eee;
+        color: #1976d2;
+    }
+
+    .drawer-dropdown-list-closed {
+        display: none;
+    }
+
+    #drawer-menu-closed {
+        transform: translateX(-100%);
+    }
+
+    #drawer-menu-glass-closed {
+        z-index: -1;
+        opacity: 0;
+    }
+
+    #drawerDropdown {
+        outline: none;
+        border: 0;
+        background: none;
+        width: 100%;
+        text-align: start;
+    }
+
+    .toolbar-right {
+        width: 100%;
+    }
+}
+
+/* =========================================
+   STAT KARTLARI
+   ========================================= */
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: 0 0 3px 1px #ccc;
+
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 0 3px 2px #ccc;
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius);
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+/* İkon renk varyantları */
+.stat-icon-warning {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+.stat-icon-info {
+    background: var(--info-light);
+    color: var(--info);
+}
+
+.stat-icon-success {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.stat-icon-primary {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.stat-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* =========================================
+   TABLO TEMEL STİLLERİ
+   ========================================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+    font-size: 14px;
+}
+
+.custom-table thead {
+    background: #f8f9fa;
+}
+
+.custom-table th {
+    padding: 15px 18px;
+    text-align: left;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.custom-table td {
+    padding: 16px 18px;
+    color: #353535;
+    border-bottom: 1px solid #f0f1f3;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr {
+    transition: background .15s ease;
+}
+
+.custom-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #f0f1f3;
+    color: #353535;
+    font-weight: 600;
+}
+
+.product-cell strong {
+    display: block;
+    color: #252525;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.product-cell span {
+    display: block;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.code {
+    display: inline-flex;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: #f5f5f5;
+    color: #555;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 7px;
+}
+
+.action-btn {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 7px 11px;
+    border-radius: 7px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.action-btn.edit {
+    color: #353535;
+}
+
+.action-btn.edit:hover {
+    background: #353535;
+    color: #fff;
+    border-color: #353535;
+}
+
+.action-btn.delete {
+    color: #dc2626;
+}
+
+.action-btn.delete:hover {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+/* =========================================
+   SERVİS TABLOSU
+   ========================================= */
+
+.service-table {
+    min-width: 1100px;
+}
+
+/* Satırların alt satıra kaymasını engelle (tablo yatay kayar) */
+.service-table td {
+    white-space: nowrap;
+}
+
+.cell-title {
+    display: block;
+    color: #252525;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.cell-sub {
+    display: block;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+/* Durum renkleri (.status yapısını kullanır) */
+.status-waiting {
+    background: var(--warning-light);
+    color: var(--warning-hover);
+}
+
+.status-waiting::before {
+    background: var(--warning);
+}
+
+.status-progress {
+    background: var(--info-light);
+    color: var(--info-hover);
+}
+
+.status-progress::before {
+    background: var(--info);
+}
+
+.status-ready {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.status-ready::before {
+    background: var(--primary);
+}
+
+.status-done {
+    background: var(--success-light);
+    color: var(--success-hover);
+}
+
+.status-done::before {
+    background: var(--success);
+}
+
+.status-cancel {
+    background: var(--danger-light);
+    color: var(--danger-hover);
+}
+
+.status-cancel::before {
+    background: var(--danger);
+}
+
+/* Toolbar + filtre sekmeleri */
+.table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.filter-tab span {
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.filter-tab:hover {
+    border-color: #353535;
+    color: #353535;
+}
+
+.filter-tab.active {
+    background: #353535;
+    border-color: #353535;
+    color: #fff;
+}
+
+.filter-tab.active span {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+}
+
+.btn-add {
+    padding: 10px 18px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.btn-add:hover {
+    background: #555;
+    border-color: #555;
+}
+
+/* Alt bilgi + sayfalama */
+.table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 14px 2px 24px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.pagination {
+    display: flex;
+    gap: 6px;
+}
+
+.page-btn {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    color: #353535;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+    border-color: #353535;
+}
+
+.page-btn.active {
+    background: #353535;
+    border-color: #353535;
+    color: #fff;
+}
+
+.page-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   GRAFİK KARTLARI
+   ========================================= */
+
+.chart-card {
+    height: 100%;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: 0 0 3px 1px #ccc;
+}
+
+.chart-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+/* Bar grafik */
+.bar-canvas {
+    position: relative;
+    height: 260px;
+}
+
+/* Doughnut grafik */
+.doughnut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+.doughnut-canvas {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    flex-shrink: 0;
+}
+
+.doughnut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.doughnut-center strong {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+.doughnut-center span {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.doughnut-legend {
+    list-style: none;
+    flex: 1;
+    min-width: 180px;
+}
+
+.doughnut-legend li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f1f3;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.doughnut-legend li:last-child {
+    border-bottom: none;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-name {
+    flex: 1;
+}
+
+.legend-count {
+    font-weight: 600;
+}
+
+.legend-percent {
+    min-width: 42px;
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+}
