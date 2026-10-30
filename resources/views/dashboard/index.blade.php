@@ -279,43 +279,172 @@
         </div>
     </div>
 </div>
-<h3 class="my-2">Cihazlar</h3>
-<hr/>
-<div class="table-wrapper">
-        <table class="custom-table service-table">
-        <thead>
-            <tr>
-                <th>Cihaz no</th>
-                <th>Marka</th>
-                <th>Model</th>
-                <th>Seri no</th>
 
-                <th>Giriş Tarihi</th>
-                <th>Fiyat</th>
-
-                <th class="text-right">İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>321</td>
-                    <td>321</td>
-                        <td>321</td>
-                            <td>321</td>
-                                <td>321</td>
-                                    <td>321</td>
-                                         <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-
-            </tr>
-        </tbody>
-
+{{-- ===== GECİKMİŞ SERVİSLER UYARI BANDI ===== --}}
+<div class="svc-alert mb-4" role="alert">
+    <div class="svc-alert-icon" aria-hidden="true">!</div>
+    <div class="svc-alert-text">
+        <strong>7 günü aşan 12 servis kaydı var</strong>
+        <span>En eski kayıt 16 gündür bekliyor (SRV-0987). Müşterileri bilgilendirmeniz önerilir.</span>
+    </div>
+    <button type="button" class="svc-alert-btn">Kayıtları gör</button>
 </div>
+
+{{-- ===== SON AKTİVİTELER + HIZLI İŞLEMLER ===== --}}
+<div class="row pb-4">
+    <div class="col-md-6 mb-3 mb-md-0">
+        <div class="chart-card">
+            <h3 class="chart-title">Son Aktiviteler</h3>
+            <ul class="svc-timeline">
+                <li>
+                    <span class="svc-dot svc-dot-success"></span>
+                    <div>
+                        <div class="svc-tl-title"><b>SRV-1043</b> teslime hazır yapıldı</div>
+                        <div class="svc-tl-meta">14:20 · Mehmet K.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="svc-dot svc-dot-primary"></span>
+                    <div>
+                        <div class="svc-tl-title"><b>SRV-1044</b> yeni kayıt açıldı</div>
+                        <div class="svc-tl-meta">13:05 · Can D.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="svc-dot svc-dot-warning"></span>
+                    <div>
+                        <div class="svc-tl-title"><b>SRV-1041</b> için parça bekleniyor</div>
+                        <div class="svc-tl-meta">11:42 · Mehmet K.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="svc-dot svc-dot-success"></span>
+                    <div>
+                        <div class="svc-tl-title"><b>SRV-1040</b> müşteriye teslim edildi</div>
+                        <div class="svc-tl-meta">Dün 17:30 · Can D.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="svc-dot svc-dot-danger"></span>
+                    <div>
+                        <div class="svc-tl-title"><b>SRV-1038</b> iptal edildi</div>
+                        <div class="svc-tl-meta">Dün 15:10 · Mehmet K.</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="chart-card">
+            <h3 class="chart-title">Hızlı İşlemler</h3>
+            <div class="svc-actions">
+                <button type="button" class="svc-action svc-action-main">
+                    <b>Yeni servis kaydı</b>
+                    <span>Cihaz ve müşteri bilgilerini girerek kayıt aç</span>
+                </button>
+                <button type="button" class="svc-action">
+                    <b>SMS gönder</b>
+                    <span>Müşteriyi bilgilendir</span>
+                </button>
+                <button type="button" class="svc-action">
+                    <b>Fiyat teklifi</b>
+                    <span>Teklif oluştur</span>
+                </button>
+                <button type="button" class="svc-action">
+                    <b>Servis sorgula</b>
+                    <span>IMEI veya seri no ile ara</span>
+                </button>
+                <button type="button" class="svc-action">
+                    <b>Rapor indir</b>
+                    <span>Aylık özet (PDF)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ===== FOOTER ===== --}}
+<footer class="svc-footer">
+    <span>Servis Takip v1.0.0</span>
+    <span class="svc-footer-status">
+        <span class="svc-dot svc-dot-success" style="margin-top:0"></span>
+        Son yedekleme: 30.09.2026 03:00
+    </span>
+    <a href="mailto:destek@ornek.com">Destek</a>
+</footer>
+
+{{-- Yeni bölümlerin stilleri. İsterseniz ana CSS dosyanıza taşıyabilirsiniz. --}}
+<style>
+    /* Uyarı bandı */
+    .svc-alert {
+        display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+        padding: 16px 20px;
+        background: #fff7ed;
+        border: 1px solid var(--warning, #d97706);
+        border-radius: 16px;
+    }
+    .svc-alert-icon {
+        flex: none; width: 36px; height: 36px; border-radius: 50%;
+        display: grid; place-items: center;
+        background: var(--warning, #d97706); color: #fff; font-weight: 700;
+    }
+    .svc-alert-text { flex: 1; min-width: 220px; }
+    .svc-alert-text strong { display: block; font-size: 15px; }
+    .svc-alert-text span { font-size: 13px; color: #6b7280; }
+    .svc-alert-btn {
+        padding: 8px 16px; font: inherit; font-size: 13px; font-weight: 500;
+        color: #fff; background: var(--warning, #d97706);
+        border: 0; border-radius: 8px; cursor: pointer;
+    }
+    .svc-alert-btn:hover { opacity: .9; }
+
+    /* Zaman çizgisi */
+    .svc-timeline { list-style: none; margin: 0; padding: 0; }
+    .svc-timeline li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; }
+    .svc-timeline li:last-child { padding-bottom: 0; }
+    .svc-timeline li::before {
+        content: ""; position: absolute; left: 5px; top: 16px; bottom: 0;
+        width: 2px; background: #e5e7eb;
+    }
+    .svc-timeline li:last-child::before { display: none; }
+    .svc-dot { flex: none; width: 12px; height: 12px; margin-top: 4px; border-radius: 50%; }
+    .svc-dot-primary { background: var(--primary, #2563eb); }
+    .svc-dot-success { background: var(--success, #059669); }
+    .svc-dot-warning { background: var(--warning, #d97706); }
+    .svc-dot-danger  { background: var(--danger, #dc2626); }
+    .svc-tl-title { font-size: 14px; }
+    .svc-tl-title b { font-weight: 600; }
+    .svc-tl-meta { margin-top: 2px; font-size: 12px; color: #6b7280; }
+
+    /* Hızlı işlemler */
+    .svc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .svc-action {
+        display: flex; flex-direction: column; gap: 4px;
+        padding: 16px; text-align: left; font: inherit; color: inherit;
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
+        cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .svc-action:hover { border-color: #353535; background: #f9fafb; }
+    .svc-action b { font-size: 14px; font-weight: 600; }
+    .svc-action span { font-size: 12px; color: #6b7280; }
+    .svc-action-main { grid-column: 1 / -1; color: #fff; background: #353535; border-color: #353535; }
+    .svc-action-main span { color: inherit; opacity: .75; }
+    .svc-action-main:hover { background: #353535; opacity: .9; }
+    @@media (max-width: 480px) { .svc-actions { grid-template-columns: 1fr; } }
+
+    /* Footer */
+    .svc-footer {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px 24px; flex-wrap: wrap;
+        margin-top: 8px; padding: 16px 0 24px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 13px; color: #6b7280;
+    }
+    .svc-footer-status { display: inline-flex; align-items: center; gap: 8px; }
+    .svc-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+    .svc-footer a:hover { color: #353535; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -324,8 +453,6 @@
 
     const css = getComputedStyle(document.documentElement);
     const color = (name) => css.getPropertyValue(name).trim();
-
-    /* ---------- Bar grafik: Aylık arızalar ---------- */
     new Chart(document.getElementById('myChart'), {
         type: 'bar',
         data: {
@@ -358,13 +485,10 @@
         }
     });
 
-    /* ---------- Doughnut grafik: Servis durumu ---------- */
     const statusData = [
         { label: 'Bekliyor',      value: 56, color: color('--warning') },
         { label: 'Devam Ediyor',  value: 8,  color: color('--info') },
         { label: 'Teslime Hazır', value: 5,  color: color('--primary') },
-        // { label: 'Teslim Edildi', value: 0, color: color('--success') },
-        // { label: 'İptal',         value: 0, color: color('--danger') },
     ];
 
     const total = statusData.reduce((sum, s) => sum + s.value, 0);

@@ -15,7 +15,7 @@
         $titles = [
             [
                 'title' => 'Gösterge Paneli',
-                'link' => '#',
+                'link' => 'dashboard.index',
                 'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
@@ -25,7 +25,7 @@
             ],
             [
                 'title' => 'Bildirimler',
-                'link' => '#',
+                'link' => "notifications.index",
                 'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -33,7 +33,7 @@
             ],
             [
                 'title' => 'Takvim',
-                'link' => '#',
+                'link' => 'schedule.index',
                 'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -43,7 +43,7 @@
             ],
             [
                 'title' => 'Raporlar',
-                'link' => '#',
+                'link' => 'report.index',
                 'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
@@ -52,21 +52,29 @@
             ],
             [
                 'title' => 'Cihazlar',
-                'link' => '#',
+                'link' => 'device.index',
                 'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="2" width="14" height="20" rx="2"></rect>
             <line x1="12" y1="18" x2="12.01" y2="18"></line>
         </svg>',
             ],
+            [
+                'title' => 'Satışlar',
+                'link' => 'sale.index',
+                'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-receipt" viewBox="0 0 16 16">
+  <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"/>
+  <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/>
+</svg>'
+            ]
         ];
     @endphp
     <nav class="nav-header">
         <div class="nav-header-content">
             <ul class="nav-list">
                 @foreach ($titles as $title)
-                    <li class="nav-item"><a class="nav-link" href="#">{{ $title['title'] }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route($title['link']) }}">{{ $title['title'] }}</a></li>
                 @endforeach
-                <li class="nav-item"><a class="nav-link" href="#">Satışlar</a></li>
+
                 <li id="dropdown" class="nav-item">
                     <a class="nav-link" href="#">Servis</a>
                     <ul class="dropdown-nav-list">
@@ -81,8 +89,21 @@
 
             </ul>
             <div class="last">
-                <button class="btn-login ">Giriş Yap</button>
-                <button class="btn-register">Kayıt Ol</button>
+
+
+  @auth
+    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+        @csrf
+        <button type="submit" class="btn-login">
+            Çıkış Yap
+        </button>
+    </form>
+@endauth
+@guest
+<a href="{{ route('login') }}" class="btn-login">Giriş Yap</a>
+<a href="{{ route('register') }}" class="btn-register">Kayıt Ol</a>
+
+@endguest
 
             </div>
         </div>
