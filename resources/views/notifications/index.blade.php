@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Bildirimler')
@@ -6,638 +7,482 @@
 
 <div class="notifications-page">
 
-    {{-- =========================================
-         HEADER
-         ========================================= --}}
+    {{-- HEADER --}}
     <div class="notifications-header">
 
         <div class="notifications-title">
-
             <h1>Bildirimler</h1>
-
-            <p>
-                Servis sisteminizdeki son gelişmeler
-            </p>
-
+            <p>Servis sisteminizdeki son gelişmeler</p>
         </div>
 
         <div class="notifications-header-actions">
-
-            <button
-                type="button"
-                class="notifications-read-all"
-            >
+            <button type="button" class="notifications-read-all">
                 Tümünü okundu işaretle
             </button>
-
         </div>
 
     </div>
 
 
-    {{-- =========================================
-         FILTERS
-         ========================================= --}}
+    {{-- FILTERS --}}
     <div class="notifications-toolbar">
 
         <div class="notification-tabs">
 
-            <button
-                type="button"
-                class="notification-tab active"
-            >
-                Tümü
+            <form action="{{ route('notifications.filter') }}" method="POST" style="display:inline;">
+                @csrf
 
-                <span class="notification-tab-count">
-                    18
-                </span>
-            </button>
+                <input type="hidden" name="filter" value="all">
 
+                <button type="submit" class="notification-tab active">
+                    Tümü
 
-            <button
-                type="button"
-                class="notification-tab"
-            >
-                Okunmamış
-
-                <span class="notification-tab-count">
-                    5
-                </span>
-            </button>
+                    <span class="notification-tab-count">
+                        {{ $notifications->count() }}
+                    </span>
+                </button>
+            </form>
 
 
-            <button
-                type="button"
-                class="notification-tab"
-            >
-                Servis
-            </button>
+            <form action="{{ route('notifications.filter') }}" method="POST" style="display:inline;">
+                @csrf
 
+                <input type="hidden" name="filter" value="unread">
 
-            <button
-                type="button"
-                class="notification-tab"
-            >
-                Ödeme
-            </button>
+                <button type="submit" class="notification-tab">
+                    Okunmamış
 
-
-            <button
-                type="button"
-                class="notification-tab"
-            >
-                Stok
-            </button>
+                    <span class="notification-tab-count">
+                        {{ $notifications->where('is_read', 0)->count() }}
+                    </span>
+                </button>
+            </form>
 
         </div>
 
     </div>
 
 
-    {{-- =========================================
-         NOTIFICATIONS
-         ========================================= --}}
+    {{-- NOTIFICATIONS --}}
     <div class="notifications-list">
 
+        @php
 
-        {{-- =====================================
-             BUGÜN
-             ===================================== --}}
-        <div class="notification-group">
+            $todayNotifications = $notifications->filter(function ($notification) {
+                return $notification->created_at->isToday();
+            });
 
-            <div class="notification-group-title">
-                Bugün
-            </div>
+            $yesterdayNotifications = $notifications->filter(function ($notification) {
+                return $notification->created_at->isYesterday();
+            });
+
+            $olderNotifications = $notifications->filter(function ($notification) {
+                return $notification->created_at->lt(
+                    now()->startOfDay()->subDay()
+                );
+            });
+
+        @endphp
 
 
-            {{-- Parça bekleniyor --}}
-            <div class="notification-item unread">
+        {{-- BUGÜN --}}
+        @if($todayNotifications->isNotEmpty())
 
-                <div class="notification-icon notification-icon-danger">
-                    !
+            <div class="notification-group" data-group="today">
+
+                <div class="notification-group-title">
+                    Bugün
                 </div>
 
+                @foreach($todayNotifications as $notification)
 
-                <div class="notification-content">
+                    <div
+                        class="notification-item {{ $notification->is_read == 0 ? 'unread' : '' }}"
+                        onclick="window.location.href='{{ route('notifications.show', $notification->id) }}'"
+                    >
 
-                    <div class="notification-top">
+                        {{-- ICON --}}
+                        @if($notification->type == 'workorder')
+                            <div class="notification-icon notification-icon-primary">+</div>
 
-                        <h3 class="notification-title">
-                            Parça bekleniyor
-                        </h3>
+                        @elseif($notification->type == 'critical')
+                            <div class="notification-icon notification-icon-danger">!</div>
 
-                        <span class="notification-time">
-                            5 dk önce
-                        </span>
+                        @elseif($notification->type == 'payment')
+                            <div class="notification-icon notification-icon-success">₺</div>
+
+                        @else
+                            <div class="notification-icon notification-icon-info">📅</div>
+                        @endif
+
+
+                        {{-- CONTENT --}}
+                        <div class="notification-content">
+
+                            <div class="notification-top">
+
+                                <h3 class="notification-title">
+                                    {{ $notification->title }}
+                                </h3>
+
+                                <span class="notification-time">
+                                    {{ $notification->created_at->format('H:i') }}
+                                </span>
+
+                            </div>
+
+
+                            <p class="notification-description">
+                                {{ $notification->message }}
+                            </p>
+
+
+                            <div class="notification-service">
+
+                                <span class="notification-service-vehicle">
+                                    {{ $notification->user->fullname ?? $notification->user->name ?? 'Bilinmeyen Kullanıcı' }}
+                                </span>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                        {{-- UNREAD DOT --}}
+                        @if($notification->is_read == 0)
+                            <span class="notification-unread-dot"></span>
+                        @endif
 
                     </div>
 
-
-                    <p class="notification-description">
-                        34 ABC 123 plakalı araç için fren balatası
-                        bekleniyor.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00124
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 ABC 123
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-danger">
-                        Kritik
-                    </span>
-
-                </div>
-
-
-                <span class="notification-unread-dot"></span>
-
-            </div>
-
-
-            {{-- Servis tamamlandı --}}
-            <div class="notification-item unread">
-
-                <div class="notification-icon notification-icon-success">
-                    ✓
-                </div>
-
-
-                <div class="notification-content">
-
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Servis tamamlandı
-                        </h3>
-
-                        <span class="notification-time">
-                            18 dk önce
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        34 XYZ 456 plakalı aracın servisi tamamlandı
-                        ve teslimata hazır.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00123
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 XYZ 456
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-success">
-                        Servis
-                    </span>
-
-                </div>
-
-
-                <span class="notification-unread-dot"></span>
+                @endforeach
 
             </div>
 
+        @endif
 
-            {{-- Yeni iş emri --}}
-            <div class="notification-item">
 
-                <div class="notification-icon notification-icon-primary">
-                    +
+        {{-- DÜN --}}
+        @if($yesterdayNotifications->isNotEmpty())
+
+            <div class="notification-group">
+
+                <div class="notification-group-title">
+                    Dün
                 </div>
 
+                @foreach($yesterdayNotifications as $notification)
 
-                <div class="notification-content">
+                    <div
+                        class="notification-item {{ $notification->is_read == 0 ? 'unread' : '' }}"
+                        onclick="window.location.href='{{ route('notifications.show', $notification) }}'"
+                    >
 
-                    <div class="notification-top">
+                        {{-- ICON --}}
+                        @if($notification->type == 'workorder')
+                            <div class="notification-icon notification-icon-primary">+</div>
 
-                        <h3 class="notification-title">
-                            Yeni iş emri oluşturuldu
-                        </h3>
+                        @elseif($notification->type == 'critical')
+                            <div class="notification-icon notification-icon-danger">!</div>
 
-                        <span class="notification-time">
-                            32 dk önce
-                        </span>
+                        @elseif($notification->type == 'payment')
+                            <div class="notification-icon notification-icon-success">₺</div>
+
+                        @else
+                            <div class="notification-icon notification-icon-info">📅</div>
+                        @endif
+
+
+                        {{-- CONTENT --}}
+                        <div class="notification-content">
+
+                            <div class="notification-top">
+
+                                <h3 class="notification-title">
+                                    {{ $notification->title }}
+                                </h3>
+
+                                <span class="notification-time">
+                                    Dün {{ $notification->created_at->format('H:i') }}
+                                </span>
+
+                            </div>
+
+
+                            <p class="notification-description">
+                                {{ $notification->message }}
+                            </p>
+
+
+                            <div class="notification-service">
+
+                                <span class="notification-service-vehicle">
+                                    {{ $notification->user->fullname ?? $notification->user->name ?? 'Bilinmeyen Kullanıcı' }}
+                                </span>
+
+                            </div>
+
+
+                            @include('notifications.partials.type')
+
+                        </div>
+
+
+                        @if($notification->is_read == 0)
+                            <span class="notification-unread-dot"></span>
+                        @endif
 
                     </div>
 
-
-                    <p class="notification-description">
-                        Ahmet Yılmaz adına yeni bir servis kaydı
-                        oluşturuldu.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00122
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 DEF 789
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-primary">
-                        İş Emri
-                    </span>
-
-                </div>
+                @endforeach
 
             </div>
 
+        @endif
 
-            {{-- Ödeme --}}
-            <div class="notification-item">
 
-                <div class="notification-icon notification-icon-success">
-                    ₺
+        {{-- DAHA ESKİ --}}
+        @if($olderNotifications->isNotEmpty())
+
+            <div class="notification-group" data-group="older">
+
+                <div class="notification-group-title">
+                    Daha Eski
                 </div>
 
+                @foreach($olderNotifications as $notification)
 
-                <div class="notification-content">
+                    <div
+                        class="notification-item {{ $notification->is_read == 0 ? 'unread' : '' }}"
+                        onclick="window.location.href='{{ route('notifications.show', $notification->id) }}'"
+                    >
 
-                    <div class="notification-top">
+                        {{-- ICON --}}
+                        @if($notification->type == 'workorder')
+                            <div class="notification-icon notification-icon-primary">+</div>
 
-                        <h3 class="notification-title">
-                            Ödeme alındı
-                        </h3>
+                        @elseif($notification->type == 'critical')
+                            <div class="notification-icon notification-icon-danger">!</div>
 
-                        <span class="notification-time">
-                            1 saat önce
-                        </span>
+                        @elseif($notification->type == 'payment')
+                            <div class="notification-icon notification-icon-success">₺</div>
+
+                        @else
+                            <div class="notification-icon notification-icon-info">📅</div>
+                        @endif
+
+
+                        {{-- CONTENT --}}
+                        <div class="notification-content">
+
+                            <div class="notification-top">
+
+                                <h3 class="notification-title">
+                                    {{ $notification->title }}
+                                </h3>
+
+                                <span class="notification-time">
+                                    {{ $notification->created_at->format('d.m.Y') }}
+                                </span>
+
+                            </div>
+
+
+                            <p class="notification-description">
+                                {{ $notification->message }}
+                            </p>
+
+
+                            <div class="notification-service">
+
+                                <span class="notification-service-vehicle">
+                                    {{ $notification->user->fullname ?? $notification->user->name ?? 'Bilinmeyen Kullanıcı' }}
+                                </span>
+
+                            </div>
+
+
+                            @include('notifications.partials.type')
+
+                        </div>
+
+
+                        @if($notification->is_read == 0)
+                            <span class="notification-unread-dot"></span>
+                        @endif
 
                     </div>
 
-
-                    <p class="notification-description">
-                        Servis ödemesi başarıyla alındı.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00119
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            18.500 ₺
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-success">
-                        Ödeme
-                    </span>
-
-                </div>
+                @endforeach
 
             </div>
 
-
-            {{-- Yeni randevu --}}
-            <div class="notification-item unread">
-
-                <div class="notification-icon notification-icon-info">
-                    📅
-                </div>
+        @endif
 
 
-                <div class="notification-content">
+        {{-- EMPTY STATE --}}
+        @if($notifications->isEmpty())
 
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Yeni servis randevusu
-                        </h3>
-
-                        <span class="notification-time">
-                            2 saat önce
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        Mehmet Kaya yarın saat 10:30 için servis
-                        randevusu oluşturdu.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            RND-2026-00421
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 GHI 456
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-info">
-                        Randevu
-                    </span>
-
-                </div>
-
-
-                <span class="notification-unread-dot"></span>
-
+            <div class="notifications-empty">
+                Henüz bir bildiriminiz bulunmuyor.
             </div>
 
-        </div>
-
-
-        {{-- =====================================
-             DÜN
-             ===================================== --}}
-        <div class="notification-group">
-
-            <div class="notification-group-title">
-                Dün
-            </div>
-
-
-            {{-- Stok --}}
-            <div class="notification-item">
-
-                <div class="notification-icon notification-icon-warning">
-                    !
-                </div>
-
-
-                <div class="notification-content">
-
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Stok seviyesi kritik
-                        </h3>
-
-                        <span class="notification-time">
-                            Dün 16:32
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        Fren balatası stok seviyesi kritik seviyeye
-                        düştü.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            STK-00042
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            Mevcut: 2 adet
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-warning">
-                        Stok
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            {{-- Servis gecikmesi --}}
-            <div class="notification-item">
-
-                <div class="notification-icon notification-icon-warning">
-                    !
-                </div>
-
-
-                <div class="notification-content">
-
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Servis gecikmesi
-                        </h3>
-
-                        <span class="notification-time">
-                            Dün 14:18
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        34 JKL 789 plakalı aracın servis süresi
-                        planlanan zamanı aştı.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00117
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 JKL 789
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-warning">
-                        Servis
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            {{-- Ödeme --}}
-            <div class="notification-item">
-
-                <div class="notification-icon notification-icon-danger">
-                    ₺
-                </div>
-
-
-                <div class="notification-content">
-
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Ödeme bekleniyor
-                        </h3>
-
-                        <span class="notification-time">
-                            Dün 11:45
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        Servis tamamlandı ancak ödeme işlemi
-                        henüz gerçekleştirilmedi.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00115
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            7.850 ₺
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-danger">
-                        Ödeme
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        {{-- =====================================
-             DAHA ESKİ
-             ===================================== --}}
-        <div class="notification-group">
-
-            <div class="notification-group-title">
-                Daha Eski
-            </div>
-
-
-            <div class="notification-item">
-
-                <div class="notification-icon notification-icon-success">
-                    ✓
-                </div>
-
-
-                <div class="notification-content">
-
-                    <div class="notification-top">
-
-                        <h3 class="notification-title">
-                            Araç teslim edildi
-                        </h3>
-
-                        <span class="notification-time">
-                            28 Eylül
-                        </span>
-
-                    </div>
-
-
-                    <p class="notification-description">
-                        34 MNO 123 plakalı araç müşteriye teslim edildi.
-                    </p>
-
-
-                    <div class="notification-service">
-
-                        <span class="notification-service-code">
-                            SRV-2026-00102
-                        </span>
-
-                        <span class="notification-service-separator">
-                            •
-                        </span>
-
-                        <span class="notification-service-vehicle">
-                            34 MNO 123
-                        </span>
-
-                    </div>
-
-
-                    <span class="notification-type notification-type-success">
-                        Servis
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
+        @endif
 
     </div>
 
 </div>
+
+@auth
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const userId = @json(auth()->id());
+
+    const notificationList = document.querySelector('.notifications-list');
+
+    if (!notificationList || !window.Echo) {
+        return;
+    }
+
+    window.Echo.private(`App.Models.User.${userId}`)
+        .notification(function (notification) {
+
+            console.log('Yeni bildirim:', notification);
+
+            const today = new Date();
+            const notificationDate = new Date();
+
+            const data = notification.data ?? notification;
+
+            const title = data.title ?? 'Yeni bildirim';
+            const message = data.message ?? '';
+            const type = data.type ?? 'info';
+            const userName = data.user_name ?? 'Sistem';
+            const notificationId = data.id ?? '';
+
+            const time = today.toLocaleTimeString('tr-TR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Bildirim ikonunu belirle
+            let iconClass = 'notification-icon-info';
+            let iconText = '📅';
+
+            if (type === 'workorder') {
+                iconClass = 'notification-icon-primary';
+                iconText = '+';
+            } else if (type === 'critical') {
+                iconClass = 'notification-icon-danger';
+                iconText = '!';
+            } else if (type === 'payment') {
+                iconClass = 'notification-icon-success';
+                iconText = '₺';
+            }
+
+            // Bugün grubu
+            let todayGroup = notificationList.querySelector(
+                '.notification-group[data-group="today"]'
+            );
+
+            if (!todayGroup) {
+                todayGroup = document.createElement('div');
+                todayGroup.className = 'notification-group';
+                todayGroup.dataset.group = 'today';
+
+                const groupTitle = document.createElement('div');
+                groupTitle.className = 'notification-group-title';
+                groupTitle.textContent = 'Bugün';
+
+                todayGroup.appendChild(groupTitle);
+                notificationList.prepend(todayGroup);
+            }
+
+            // Bildirim elementi
+            const item = document.createElement('div');
+
+            item.className = 'notification-item unread';
+
+            const icon = document.createElement('div');
+            icon.className = `notification-icon ${iconClass}`;
+            icon.textContent = iconText;
+
+            const content = document.createElement('div');
+            content.className = 'notification-content';
+
+            const top = document.createElement('div');
+            top.className = 'notification-top';
+
+            const heading = document.createElement('h3');
+            heading.className = 'notification-title';
+            heading.textContent = title;
+
+            const timeElement = document.createElement('span');
+            timeElement.className = 'notification-time';
+            timeElement.textContent = time;
+
+            const description = document.createElement('p');
+            description.className = 'notification-description';
+            description.textContent = message;
+
+            const service = document.createElement('div');
+            service.className = 'notification-service';
+
+            const serviceName = document.createElement('span');
+            serviceName.className = 'notification-service-vehicle';
+            serviceName.textContent = userName;
+
+            const dot = document.createElement('span');
+            dot.className = 'notification-unread-dot';
+
+            top.appendChild(heading);
+            top.appendChild(timeElement);
+
+            service.appendChild(serviceName);
+
+            content.appendChild(top);
+            content.appendChild(description);
+            content.appendChild(service);
+
+            item.appendChild(icon);
+            item.appendChild(content);
+            item.appendChild(dot);
+
+            // Bildirime tıklama
+            if (notificationId) {
+                item.addEventListener('click', function () {
+                    window.location.href =
+                        `/notifications/${encodeURIComponent(notificationId)}`;
+                });
+            }
+
+            // Listenin başına ekle
+            todayGroup.insertBefore(item, todayGroup.children[1]);
+
+            // Okunmamış sayacını güncelle
+            const unreadTab = document.querySelectorAll('.notification-tab-count')[1];
+
+            if (unreadTab) {
+                unreadTab.textContent =
+                    Number(unreadTab.textContent) + 1;
+            }
+
+            // Tüm bildirim sayacını güncelle
+            const allTab = document.querySelectorAll('.notification-tab-count')[0];
+
+            if (allTab) {
+                allTab.textContent =
+                    Number(allTab.textContent) + 1;
+            }
+
+        });
+
+});
+</script>
+@endauth
 
 @endsection

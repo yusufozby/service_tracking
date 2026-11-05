@@ -15,7 +15,7 @@ class deviceController extends Controller
     }
     public function index(Request $request){
         $query = Device::query();
-          $fullDevices = (clone $query)->get();
+
         if($request->filled('status')){
             $query->where('status',$request->status);
         }
@@ -29,6 +29,7 @@ class deviceController extends Controller
 
     });
         }
+           $fullDevices = (clone $query)->get();
         $devices = $query->paginate(10)->withQueryString();
 
 
@@ -50,6 +51,7 @@ class deviceController extends Controller
     }
     public function delete(Device $device){
         $device->delete();
+        Storage::disk('public')->delete($device->image);
         return redirect()->route('device.index');
 
     }

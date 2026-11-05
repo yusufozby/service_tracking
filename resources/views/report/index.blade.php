@@ -220,6 +220,14 @@
     gap: 16px 20px;
 }
 
+/* Alt satır: Servis Durumu + Personel => %50 / %50 */
+.reports-page .report-filter-row-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 20px;
+    margin-top: 16px;
+}
+
 .reports-page .report-form-group {
     display: flex;
     flex-direction: column;
@@ -632,6 +640,7 @@
 
     .reports-page .reports-stats,
     .reports-page .report-filter-grid,
+    .reports-page .report-filter-row-2,
     .reports-page .quick-reports-grid {
         grid-template-columns: 1fr;
     }
@@ -679,6 +688,7 @@
     }
 }
 </style>
+
 <div class="reports-page">
 
     {{-- =========================
@@ -692,142 +702,71 @@
         </div>
 
         <div class="reports-header-actions">
-            <button type="button" class="btn-report-secondary">
-                Yazdır
-            </button>
-
-            <button type="button" class="btn-report-primary">
-                PDF Oluştur
-            </button>
+            <button type="button" class="btn-report-secondary">Yazdır</button>
+            <button type="button" class="btn-report-primary">PDF Oluştur</button>
         </div>
 
     </div>
+
+
+    {{-- =========================
+         STAT CARDS
+         ========================= --}}
     <div class="reports-stats">
 
         <div class="report-stat-card">
-
             <div class="report-stat-icon report-stat-icon-primary">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M4 19V5C4 4.44772 4.44772 4 5 4H19C19.5523 4 20 4.44772 20 5V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    />
-                    <path
-                        d="M8 16V11"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M12 16V8"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M16 16V13"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                    />
+                    <path d="M4 19V5C4 4.44772 4.44772 4 5 4H19C19.5523 4 20 4.44772 20 5V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19Z" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8 16V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M12 16V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M16 16V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
             </div>
-
             <div class="report-stat-content">
                 <span class="report-stat-value">248</span>
                 <span class="report-stat-label">Toplam Servis</span>
             </div>
-
         </div>
 
-
         <div class="report-stat-card">
-
             <div class="report-stat-icon report-stat-icon-success">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M20 6L9 17L4 12"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-
             <div class="report-stat-content">
                 <span class="report-stat-value">192</span>
                 <span class="report-stat-label">Tamamlanan</span>
             </div>
-
         </div>
 
-
         <div class="report-stat-card">
-
             <div class="report-stat-icon report-stat-icon-warning">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M12 8V12"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M12 16H12.01"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M10.29 3.86L1.82 18C1.12 19.17 1.96 20.67 3.33 20.67H20.67C22.04 20.67 22.88 19.17 22.18 18L13.71 3.86C13 2.68 11 2.68 10.29 3.86Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linejoin="round"
-                    />
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M10.29 3.86L1.82 18C1.12 19.17 1.96 20.67 3.33 20.67H20.67C22.04 20.67 22.88 19.17 22.18 18L13.71 3.86C13 2.68 11 2.68 10.29 3.86Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
                 </svg>
             </div>
-
             <div class="report-stat-content">
                 <span class="report-stat-value">31</span>
                 <span class="report-stat-label">Bekleyen</span>
             </div>
-
         </div>
 
-
         <div class="report-stat-card">
-
             <div class="report-stat-icon report-stat-icon-info">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M3 3V21"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M3 17H21"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                    />
-                    <path
-                        d="M7 13L10 10L13 12L19 6"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
+                    <path d="M3 3V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M3 17H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M7 13L10 10L13 12L19 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-
             <div class="report-stat-content">
                 <span class="report-stat-value">77%</span>
                 <span class="report-stat-label">Tamamlanma Oranı</span>
             </div>
-
         </div>
 
     </div>
@@ -839,23 +778,17 @@
     <div class="report-filter-card">
 
         <div class="report-filter-header">
-
             <div>
                 <h2>Rapor Filtreleri</h2>
                 <p>Raporlamak istediğiniz servisleri filtreleyin.</p>
             </div>
-
         </div>
 
-
+        {{-- Üst satır: 3 eşit sütun --}}
         <div class="report-filter-grid">
 
             <div class="report-form-group">
-
-                <label for="report-type">
-                    Rapor Türü
-                </label>
-
+                <label for="report-type">Rapor Türü</label>
                 <select id="report-type" class="report-form-control">
                     <option value="service">Servis Raporu</option>
                     <option value="personnel">Personel Raporu</option>
@@ -863,149 +796,50 @@
                     <option value="vehicle">Araç Raporu</option>
                     <option value="income">Gelir Raporu</option>
                 </select>
-
             </div>
 
-
             <div class="report-form-group">
-
-                <label for="start-date">
-                    Başlangıç Tarihi
-                </label>
-
-                <input
-                    type="date"
-                    id="start-date"
-                    class="report-form-control"
-                    value="2026-10-01"
-                >
-
+                <label for="start-date">Başlangıç Tarihi</label>
+                <input type="date" id="start-date" class="report-form-control" value="2026-10-01">
             </div>
 
-
             <div class="report-form-group">
-
-                <label for="end-date">
-                    Bitiş Tarihi
-                </label>
-
-                <input
-                    type="date"
-                    id="end-date"
-                    class="report-form-control"
-                    value="2026-10-08"
-                >
-
-            </div>
-
-
-            <div class="report-form-group">
-
-                <label for="report-status">
-                    Servis Durumu
-                </label>
-
-                <select id="report-status" class="report-form-control">
-
-                    <option value="all">
-                        Tüm Durumlar
-                    </option>
-
-                    <option value="waiting">
-                        Bekliyor
-                    </option>
-
-                    <option value="progress">
-                        Devam Ediyor
-                    </option>
-
-                    <option value="ready">
-                        Hazır
-                    </option>
-
-                    <option value="done">
-                        Tamamlandı
-                    </option>
-
-                    <option value="cancel">
-                        İptal
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="report-form-group">
-
-                <label for="personnel">
-                    Personel
-                </label>
-
-                <select id="personnel" class="report-form-control">
-
-                    <option value="all">
-                        Tüm Personel
-                    </option>
-
-                    <option>
-                        Mehmet Kaya
-                    </option>
-
-                    <option>
-                        Ali Çelik
-                    </option>
-
-                    <option>
-                        Hasan Yıldız
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="report-form-group">
-
-                <label for="customer">
-                    Müşteri
-                </label>
-
-                <select id="customer" class="report-form-control">
-
-                    <option value="all">
-                        Tüm Müşteriler
-                    </option>
-
-                    <option>
-                        Ahmet Yılmaz
-                    </option>
-
-                    <option>
-                        Mustafa Demir
-                    </option>
-
-                    <option>
-                        Burak Şahin
-                    </option>
-
-                </select>
-
+                <label for="end-date">Bitiş Tarihi</label>
+                <input type="date" id="end-date" class="report-form-control" value="2026-10-08">
             </div>
 
         </div>
 
+        {{-- Alt satır: %50 / %50 --}}
+        <div class="report-filter-row-2">
+
+            <div class="report-form-group">
+                <label for="report-status">Servis Durumu</label>
+                <select id="report-status" class="report-form-control">
+                    <option value="all">Tüm Durumlar</option>
+                    <option value="waiting">Bekliyor</option>
+                    <option value="progress">Devam Ediyor</option>
+                    <option value="ready">Hazır</option>
+                    <option value="done">Tamamlandı</option>
+                    <option value="cancel">İptal</option>
+                </select>
+            </div>
+
+            <div class="report-form-group">
+                <label for="personnel">Personel</label>
+                <select id="personnel" class="report-form-control">
+                    <option value="all">Tüm Personel</option>
+                    <option>Mehmet Kaya</option>
+                    <option>Ali Çelik</option>
+                    <option>Hasan Yıldız</option>
+                </select>
+            </div>
+
+        </div>
 
         <div class="report-filter-actions">
-
-            <button type="button" class="btn-report-clear">
-                Filtreleri Temizle
-            </button>
-
-            <button type="button" class="btn-report-primary">
-                Raporu Getir
-            </button>
-
+            <button type="button" class="btn-report-clear">Filtreleri Temizle</button>
+            <button type="button" class="btn-report-primary">Raporu Getir</button>
         </div>
 
     </div>
@@ -1019,83 +853,30 @@
         <div class="report-result-header">
 
             <div class="report-result-title">
-
                 <h2>Servis Raporu</h2>
-
-                <p>
-                    01 Ekim 2026 - 08 Ekim 2026
-                </p>
-
+                <p>01 Ekim 2026 - 08 Ekim 2026</p>
             </div>
-
 
             <div class="report-result-actions">
 
                 <button type="button" class="report-export-btn report-export-pdf">
-
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linejoin="round"
-                        />
-                        <path
-                            d="M14 2V8H20"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linejoin="round"
-                        />
-                        <path
-                            d="M8 13H16"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                        />
-                        <path
-                            d="M8 17H13"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                        />
+                        <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M8 13H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M8 17H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
-
                     PDF
-
                 </button>
 
-
                 <button type="button" class="report-export-btn report-export-excel">
-
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M4 4C4 2.9 4.9 2 6 2H14L20 8V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4Z"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linejoin="round"
-                        />
-                        <path
-                            d="M14 2V8H20"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linejoin="round"
-                        />
-                        <path
-                            d="M8 13L12 17"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                        />
-                        <path
-                            d="M12 13L8 17"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                        />
+                        <path d="M4 4C4 2.9 4.9 2 6 2H14L20 8V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M8 13L12 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M12 13L8 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
-
                     Excel
-
                 </button>
 
             </div>
@@ -1103,60 +884,44 @@
         </div>
 
 
-        {{-- =========================
-             REPORT SUMMARY
-             ========================= --}}
+        {{-- REPORT SUMMARY --}}
         <div class="report-summary">
 
             <div class="report-summary-item">
-
                 <span>Toplam Servis</span>
                 <strong>248</strong>
-
             </div>
 
             <div class="report-summary-item">
-
                 <span>Tamamlanan</span>
                 <strong class="summary-success">192</strong>
-
             </div>
 
             <div class="report-summary-item">
-
                 <span>Devam Eden</span>
                 <strong class="summary-info">25</strong>
-
             </div>
 
             <div class="report-summary-item">
-
                 <span>Bekleyen</span>
                 <strong class="summary-warning">31</strong>
-
             </div>
 
             <div class="report-summary-item">
-
                 <span>İptal</span>
                 <strong class="summary-danger">0</strong>
-
             </div>
 
         </div>
 
 
-        {{-- =========================
-             TABLE
-             ========================= --}}
+        {{-- TABLE --}}
         <div class="report-table-wrapper">
 
             <table class="custom-table report-table">
 
                 <thead>
-
                     <tr>
-
                         <th>Servis No</th>
                         <th>Tarih</th>
                         <th>Müşteri</th>
@@ -1166,291 +931,28 @@
                         <th>Süre</th>
                         <th>Durum</th>
                         <th class="text-right">Tutar</th>
-
                     </tr>
-
                 </thead>
-
 
                 <tbody>
 
-                    <tr>
 
+                    @foreach ($reports as  $report)
+                          <tr>
+                        <td><span class="code">{{ $report->title }}</span></td>
+                        <td>08.10.2026</td>
+                        <td><span class="cell-title">Ahmet Yılmaz</span></td>
                         <td>
-                            <span class="code">
-                                SRV-26001
-                            </span>
+                            <span class="cell-title">BMW 320i</span>
+                            <span class="cell-sub">34 ABC 123</span>
                         </td>
-
-                        <td>
-                            08.10.2026
-                        </td>
-
-                        <td>
-                            <span class="cell-title">
-                                Ahmet Yılmaz
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="cell-title">
-                                BMW 320i
-                            </span>
-
-                            <span class="cell-sub">
-                                34 ABC 123
-                            </span>
-                        </td>
-
-                        <td>
-                            Periyodik Bakım
-                        </td>
-
-                        <td>
-                            Mehmet Kaya
-                        </td>
-
-                        <td>
-                            1 saat
-                        </td>
-
-                        <td>
-                            <span class="status status-progress">
-                                Devam Ediyor
-                            </span>
-                        </td>
-
-                        <td class="text-right">
-                            ₺4.500
-                        </td>
-
+                        <td>Periyodik Bakım</td>
+                        <td>Mehmet Kaya</td>
+                        <td>1 saat</td>
+                        <td><span class="status status-progress">Devam Ediyor</span></td>
+                        <td class="text-right">₺4.500</td>
                     </tr>
-
-
-                    <tr>
-
-                        <td>
-                            <span class="code">
-                                SRV-26002
-                            </span>
-                        </td>
-
-                        <td>
-                            08.10.2026
-                        </td>
-
-                        <td>
-                            Mustafa Demir
-                        </td>
-
-                        <td>
-
-                            <span class="cell-title">
-                                Renault Clio
-                            </span>
-
-                            <span class="cell-sub">
-                                34 XYZ 456
-                            </span>
-
-                        </td>
-
-                        <td>
-                            Fren Sistemi Kontrolü
-                        </td>
-
-                        <td>
-                            Ali Çelik
-                        </td>
-
-                        <td>
-                            45 dk
-                        </td>
-
-                        <td>
-
-                            <span class="status status-waiting">
-                                Bekliyor
-                            </span>
-
-                        </td>
-
-                        <td class="text-right">
-                            ₺2.750
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-
-                            <span class="code">
-                                SRV-26003
-                            </span>
-
-                        </td>
-
-                        <td>
-                            08.10.2026
-                        </td>
-
-                        <td>
-                            Burak Şahin
-                        </td>
-
-                        <td>
-
-                            <span class="cell-title">
-                                Fiat Egea
-                            </span>
-
-                            <span class="cell-sub">
-                                06 DEF 789
-                            </span>
-
-                        </td>
-
-                        <td>
-                            Yağ ve Filtre Değişimi
-                        </td>
-
-                        <td>
-                            Hasan Yıldız
-                        </td>
-
-                        <td>
-                            30 dk
-                        </td>
-
-                        <td>
-
-                            <span class="status status-ready">
-                                Hazır
-                            </span>
-
-                        </td>
-
-                        <td class="text-right">
-                            ₺1.850
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-
-                            <span class="code">
-                                SRV-25998
-                            </span>
-
-                        </td>
-
-                        <td>
-                            07.10.2026
-                        </td>
-
-                        <td>
-                            Mehmet Kaya
-                        </td>
-
-                        <td>
-
-                            <span class="cell-title">
-                                Volkswagen Golf
-                            </span>
-
-                            <span class="cell-sub">
-                                34 KLM 321
-                            </span>
-
-                        </td>
-
-                        <td>
-                            Motor Bakımı
-                        </td>
-
-                        <td>
-                            Mehmet Kaya
-                        </td>
-
-                        <td>
-                            2 saat
-                        </td>
-
-                        <td>
-
-                            <span class="status status-done">
-                                Tamamlandı
-                            </span>
-
-                        </td>
-
-                        <td class="text-right">
-                            ₺6.250
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-
-                            <span class="code">
-                                SRV-25997
-                            </span>
-
-                        </td>
-
-                        <td>
-                            07.10.2026
-                        </td>
-
-                        <td>
-                            Ayşe Demir
-                        </td>
-
-                        <td>
-
-                            <span class="cell-title">
-                                Ford Focus
-                            </span>
-
-                            <span class="cell-sub">
-                                34 MNO 654
-                            </span>
-
-                        </td>
-
-                        <td>
-                            Klima Bakımı
-                        </td>
-
-                        <td>
-                            Ali Çelik
-                        </td>
-
-                        <td>
-                            1 saat
-                        </td>
-
-                        <td>
-
-                            <span class="status status-done">
-                                Tamamlandı
-                            </span>
-
-                        </td>
-
-                        <td class="text-right">
-                            ₺3.200
-                        </td>
-
-                    </tr>
+                    @endforeach
 
                 </tbody>
 
@@ -1459,131 +961,74 @@
         </div>
 
 
-        {{-- =========================
-             FOOTER
-             ========================= --}}
+        {{-- FOOTER --}}
         <div class="report-result-footer">
 
-            <span>
-                248 servisten 5 tanesi gösteriliyor
-            </span>
+            <span>248 servisten 5 tanesi gösteriliyor</span>
 
             <div class="pagination">
-
-                <button class="page-btn" disabled>
-                    ‹
-                </button>
-
-                <button class="page-btn active">
-                    1
-                </button>
-
-                <button class="page-btn">
-                    2
-                </button>
-
-                <button class="page-btn">
-                    3
-                </button>
-
-                <button class="page-btn">
-                    ...
-                </button>
-
-                <button class="page-btn">
-                    50
-                </button>
-
-                <button class="page-btn">
-                    ›
-                </button>
-
+                <button class="page-btn" disabled>‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">50</button>
+                <button class="page-btn">›</button>
             </div>
 
         </div>
 
     </div>
+
+
+    {{-- =========================
+         QUICK REPORTS
+         ========================= --}}
     <div class="quick-reports">
-         <div class="quick-reports-header">
+
+        <div class="quick-reports-header">
             <div>
                 <h2>Hızlı Raporlar</h2>
                 <p>Sık kullanılan raporlara hızlıca ulaşın.</p>
             </div>
-
         </div>
-
 
         <div class="quick-reports-grid">
 
             <button class="quick-report-card">
-
-                <div class="quick-report-icon quick-report-icon-primary">
-                    📊
-                </div>
-
+                <div class="quick-report-icon quick-report-icon-primary">📊</div>
                 <div class="quick-report-content">
                     <strong>Aylık Servis Raporu</strong>
                     <span>Aylık servis performansını görüntüle</span>
                 </div>
-
-                <span class="quick-report-arrow">
-                    →
-                </span>
-
+                <span class="quick-report-arrow">→</span>
             </button>
 
-
             <button class="quick-report-card">
-
-                <div class="quick-report-icon quick-report-icon-success">
-                    ✓
-                </div>
-
+                <div class="quick-report-icon quick-report-icon-success">✓</div>
                 <div class="quick-report-content">
                     <strong>Personel Performansı</strong>
                     <span>Personel bazlı servis performansı</span>
                 </div>
-
-                <span class="quick-report-arrow">
-                    →
-                </span>
-
+                <span class="quick-report-arrow">→</span>
             </button>
 
-
             <button class="quick-report-card">
-
-                <div class="quick-report-icon quick-report-icon-warning">
-                    ₺
-                </div>
-
+                <div class="quick-report-icon quick-report-icon-warning">₺</div>
                 <div class="quick-report-content">
                     <strong>Gelir Raporu</strong>
                     <span>Servis gelirlerini incele</span>
                 </div>
-
-                <span class="quick-report-arrow">
-                    →
-                </span>
-
+                <span class="quick-report-arrow">→</span>
             </button>
 
-
             <button class="quick-report-card">
-
-                <div class="quick-report-icon quick-report-icon-info">
-                    🚗
-                </div>
-
+                <div class="quick-report-icon quick-report-icon-info">🚗</div>
                 <div class="quick-report-content">
                     <strong>Araç Servis Geçmişi</strong>
                     <span>Araç bazlı servis geçmişini görüntüle</span>
                 </div>
-
-                <span class="quick-report-arrow">
-                    →
-                </span>
-
+                <span class="quick-report-arrow">→</span>
             </button>
 
         </div>

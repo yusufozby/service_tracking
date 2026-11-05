@@ -104,22 +104,22 @@
 
               <button onclick="onStatusChange('full')" class="filter-tab {{ request('status') == '' ? 'active' : '' }}">
                     Tümü
-                    <span>{{$devices->count()}}</span>
+                    <span>{{$fullDevices->count()}}</span>
                 </button>
 
          <button onclick="onStatusChange('active')" class="filter-tab {{ request('status') == 'active' ? 'active' : '' }}">
                     Aktif
-                    <span>{{$devices->where('status','active')->count()}}</span>
+                    <span>{{$fullDevices->where('status','active')->count()}}</span>
                 </button>
 
                 <button  onclick="onStatusChange('onService')" class="filter-tab {{ request('status') == 'onService' ? 'active' : '' }}">
                     Serviste
-                  <span>{{$devices->where('status','onService')->count()}}</span>
+                  <span>{{$fullDevices->where('status','onService')->count()}}</span>
                 </button>
 
                 <button  onclick="onStatusChange('passive')" class="filter-tab {{ request('status') == 'passive' ? 'active' : '' }}">
                     Pasif
-                    <span>{{$devices->where('status','passive')->count()}}</span>
+                    <span>{{$fullDevices->where('status','passive')->count()}}</span>
                 </button>
 
             </div>
@@ -219,11 +219,25 @@
                  class="w-full h-full object-cover">
 
     @else
-        <div class="w-6 h-6 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-        </div>
+   <div style="
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+">
+    <svg width="50" height="50"
+         fill="none"
+         stroke="currentColor"
+         viewBox="0 0 24 24">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+        </path>
+    </svg>
+</div>
     @endif
 </td>
                     <td>
@@ -281,16 +295,14 @@
 
         <div class="pagination">
 @php
-    $paging = [];
+    $pageCount = ceil($fullDevices->count() / 10);
 @endphp
 
-       @foreach ($devices as $index => $device )
-       <button class="page-btn">
-        {{ $index }}
-       </button>
-
-
-       @endforeach
+     @for ($i = 1; $i <= $pageCount; $i++)
+    <button class="page-btn {{ $i == request('page') ? 'active' : ''  }}" onclick="onPageChange({{ $i }})">
+        {{ $i }}
+    </button>
+@endfor
 
         </div>
 
@@ -298,12 +310,18 @@
 
 </div>
 <script>
+ const url = new URL(window.location.href);
+function  onPageChange(page) {
+    url.searchParams.set('page', page);
+    window.location.href = url.toString();
+
+}
 
 function onStatusChange(status) {
 
 
 
-    const url = new URL(window.location.href);
+
 
     if (status === 'full') {
         url.searchParams.delete('status');

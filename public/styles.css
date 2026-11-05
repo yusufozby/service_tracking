@@ -225,27 +225,87 @@ select {
     position: relative;
 }
 
+/* Servis linki + ok ikonu */
+.nav-header .nav-list .nav-link-dropdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-chevron {
+    display: inline-flex;
+    align-items: center;
+    color: var(--gray-400);
+    transition: transform .2s ease, color .2s ease;
+}
+
+#dropdown:hover .nav-chevron,
+#dropdown:focus-within .nav-chevron {
+    transform: rotate(180deg);
+    color: #1976d2;
+}
+
+#dropdown:hover .nav-link,
+#dropdown:focus-within .nav-link {
+    color: #1976d2;
+}
+
+#dropdown:hover .nav-link::after,
+#dropdown:focus-within .nav-link::after {
+    transform: scaleX(1) translateY(4px);
+}
+
+/* Açılır panel */
 .dropdown-nav-list {
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 200px;
+    top: calc(100% + 14px);
+    left: -12px;
+    min-width: 290px;
+    padding: 8px;
     background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
-    padding: 8px 0;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, .12), 0 2px 6px rgba(15, 23, 42, .05);
     list-style: none;
     z-index: 1000;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
     display: flex;
     flex-direction: column;
+    gap: 2px;
+    transform: translateY(8px);
+    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
 }
 
-#dropdown:hover .dropdown-nav-list {
+/* Link ile panel arasındaki boşlukta hover kopmasın diye köprü */
+.dropdown-nav-list::before {
+    content: "";
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    height: 16px;
+}
+
+/* Üstteki küçük ok */
+.dropdown-nav-list::after {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 28px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-top: 1px solid var(--gray-200);
+    border-left: 1px solid var(--gray-200);
+    transform: rotate(45deg);
+}
+
+#dropdown:hover .dropdown-nav-list,
+#dropdown:focus-within .dropdown-nav-list {
     visibility: visible;
     opacity: 1;
+    transform: translateY(0);
 }
 
 .nav-dropdown-item {
@@ -256,20 +316,74 @@ select {
 }
 
 .nav-dropdown-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     width: 100%;
-    padding: 10px 18px;
-    color: #333;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    color: var(--text);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
-    white-space: nowrap;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color .15s ease;
 }
 
-.dropdown-nav-list li a:hover {
-    background: #ccc;
+.nav-dropdown-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.nav-dropdown-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.nav-dropdown-text strong {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+}
+
+.nav-dropdown-text small {
+    font-size: 12px;
+    line-height: 1.3;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.nav-dropdown-link:hover,
+.nav-dropdown-link:focus-visible {
+    background: var(--gray-50);
+    outline: none;
+}
+
+.nav-dropdown-link:hover .nav-dropdown-icon,
+.nav-dropdown-link:focus-visible .nav-dropdown-icon {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* Her öğeye ayrı vurgu rengi (hover'da ikon rengi) */
+.nav-dropdown-item:nth-child(1) .nav-dropdown-link:hover .nav-dropdown-icon {
+    background: var(--danger);
+}
+
+.nav-dropdown-item:nth-child(2) .nav-dropdown-link:hover .nav-dropdown-icon {
+    background: var(--warning);
+}
+
+.nav-dropdown-item:nth-child(3) .nav-dropdown-link:hover .nav-dropdown-icon {
+    background: var(--success);
 }
 
 
@@ -402,7 +516,9 @@ select {
     }
 
     .drawer-nav-link {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         padding: 14px 10px;
         color: #333;
         text-decoration: none;
@@ -415,21 +531,89 @@ select {
         color: #1976d2;
     }
 
+    /* Servis butonu */
+    #drawerDropdown {
+        outline: none;
+        border: 0;
+        background: none;
+        width: 100%;
+        text-align: start;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .drawer-dropdown-label {
+        flex: 1;
+    }
+
+    .drawer-chevron {
+        display: inline-flex;
+        align-items: center;
+        color: var(--gray-400);
+        transition: transform .2s ease;
+    }
+
+    #drawerDropdown.open {
+        color: #1976d2;
+    }
+
+    #drawerDropdown.open .drawer-chevron {
+        transform: rotate(180deg);
+        color: #1976d2;
+    }
+
+    /* Açılır liste: varsayılan kapalı, .open ile açılır */
     .drawer-dropdown-list {
         list-style: none;
-        background: #f8f8f8;
+        margin: 0 10px;
+        padding: 0 6px;
+        max-height: 0;
+        overflow: hidden;
+        background: #f8fafc;
+        border-radius: var(--radius);
+        transition: max-height .25s ease, padding .25s ease, margin .25s ease;
+    }
+
+    .drawer-dropdown-list.open {
+        max-height: 260px;
+        padding: 6px;
+        margin: 4px 10px 8px;
     }
 
     .drawer-dropdown-list li a {
-        display: block;
-        padding: 11px 20px 11px 40px;
-        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        color: #475569;
         text-decoration: none;
         font-size: 14px;
+        font-weight: 500;
     }
 
-    .drawer-dropdown-list-closed {
-        display: none;
+    .drawer-dropdown-list li a:hover {
+        background: #fff;
+        color: #1976d2;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .drawer-dropdown-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background: #fff;
+        color: var(--gray-600);
+        border: 1px solid var(--gray-200);
+    }
+
+    .drawer-dropdown-icon svg {
+        width: 16px;
+        height: 16px;
     }
 
     #drawer-menu-closed {
@@ -439,14 +623,6 @@ select {
     #drawer-menu-glass-closed {
         z-index: -1;
         opacity: 0;
-    }
-
-    #drawerDropdown {
-        outline: none;
-        border: 0;
-        background: none;
-        width: 100%;
-        text-align: start;
     }
 
     .toolbar-right {
@@ -1429,6 +1605,7 @@ select {
 .notification-item {
     position: relative;
     display: flex;
+    cursor: pointer;
     align-items: flex-start;
     gap: 14px;
     padding: 16px 18px;
