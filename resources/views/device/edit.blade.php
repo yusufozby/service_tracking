@@ -56,7 +56,7 @@
                 <div class="auth-form-group">
                     <label class="auth-form-label" for="type">Cihaz türü</label>
                     <input class="auth-input" type="text" id="type" name="type"
-                           value="{{ old('type', $device->type) }}">
+                           value="{{ $device->type }}">
                     @error('type') <span class="auth-error">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -74,18 +74,7 @@
                     @error('status') <span class="auth-error">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="auth-form-group">
-                    <label class="auth-form-label" for="personel_id">Sorumlu personel</label>
-                    <select class="auth-input" id="personel_id" name="personel_id">
-                        @foreach ($personels as $personel)
-                            <option value="{{ $personel->id }}"
-                                @selected(old('personel_id', $device->personel_id) == $personel->id)>
-                                {{ $personel->fullname }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('personel_id') <span class="auth-error">{{ $message }}</span> @enderror
-                </div>
+
             </div>
 
             <div class="auth-form-group">

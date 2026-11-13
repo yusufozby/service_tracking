@@ -11,5 +11,13 @@ class reportController extends Controller
         $reports = Report::all();
         return view('report.index',compact('reports'));
     }
-    //
+  public function filterReports(Request $request){
+      $query = Report::query();
+      $query->when();
+
+
+      return redirect()->route('report.index',compact('reports'));
+
+  }
+
 }

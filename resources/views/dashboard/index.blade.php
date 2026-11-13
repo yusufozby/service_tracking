@@ -1,85 +1,145 @@
+
 @extends('layouts.app')
+
+@section('title', 'Servis Yönetimi')
 
 @section('content')
 
-{{-- ===== STAT KARTLARI ===== --}}
+@php
+    $statusLabels = [
+        'pending'   => 'Bekliyor',
+        'continues' => 'Devam Ediyor',
+        'ready'     => 'Teslime Hazır',
+        'delivered' => 'Teslim Edildi',
+    ];
+
+    $statusClasses = [
+        'pending'   => 'status-waiting',
+        'continues' => 'status-info',
+        'ready'     => 'status-ready',
+        'delivered' => 'status-success',
+    ];
+
+    $serviceRows = method_exists($services, 'getCollection')
+        ? $services->getCollection()
+        : $services;
+
+    $statusCounts = [];
+
+    foreach ($statusLabels as $status => $label) {
+        $statusCounts[$status] = $serviceRows
+            ->where('status', $status)
+            ->count();
+    }
+
+    $totalServices = array_sum($statusCounts);
+    $totalRevenue = $serviceRows->sum('price');
+@endphp
+
+{{-- ================= STAT KARTLARI ================= --}}
+
 <div class="row my-3">
+
     <div class="col-md-3 pb-2">
         <div class="stat-card">
             <div class="stat-icon stat-icon-warning">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span>◷</span>
             </div>
             <div class="stat-content">
-                <span class="stat-value">56</span>
+                <span class="stat-value">{{ $statusCounts['pending'] }}</span>
                 <span class="stat-label">Bekleyen Servis</span>
             </div>
         </div>
     </div>
+
     <div class="col-md-3 pb-2">
-        <div class="stat-card ">
+        <div class="stat-card">
             <div class="stat-icon stat-icon-info">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-6.16c-.395-.414-.605-.976-.595-1.552a6 6 0 00-7.478-6.375c-.29.077-.371.416-.157.63l4.65 4.65a1.5 1.5 0 01-2.122 2.121l-4.65-4.65c-.213-.214-.552-.133-.63.157a6 6 0 006.375 7.478c.576-.01 1.14.2 1.552.595z" />
-                </svg>
+                <span>⚙</span>
             </div>
             <div class="stat-content">
-                <span class="stat-value">8</span>
+                <span class="stat-value">{{ $statusCounts['continues'] }}</span>
                 <span class="stat-label">Devam Eden</span>
             </div>
         </div>
     </div>
+
     <div class="col-md-3 pb-2">
         <div class="stat-card">
             <div class="stat-icon stat-icon-success">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
+                <span>✓</span>
             </div>
             <div class="stat-content">
-                <span class="stat-value">5</span>
-                <span class="stat-label">Bugün Teslim</span>
+                <span class="stat-value">{{ $statusCounts['ready'] }}</span>
+                <span class="stat-label">Teslime Hazır</span>
             </div>
         </div>
     </div>
+
     <div class="col-md-3 pb-2">
         <div class="stat-card">
             <div class="stat-icon stat-icon-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span>₺</span>
             </div>
             <div class="stat-content">
-                <span class="stat-value">₺24.500</span>
+                <span class="stat-value">
+                    ₺{{ number_format($totalRevenue, 2, ',', '.') }}
+                </span>
                 <span class="stat-label">Toplam Gelir</span>
             </div>
         </div>
     </div>
+
 </div>
 
-{{-- ===== ARAMA ===== --}}
+
+{{-- ================= ARAMA ================= --}}
+
 <x-input
     name="search"
     hintText="Ara..."
 />
 
-{{-- ===== TOOLBAR (filtre sekmeleri + yeni servis) ===== --}}
+
+{{-- ================= TOOLBAR ================= --}}
+
 <div class="table-toolbar">
+
     <div class="filter-tabs">
-        <button class="filter-tab active">Tümü <span>69</span></button>
-        <button class="filter-tab">Bekleyen <span>56</span></button>
-        <button class="filter-tab">Devam Eden <span>8</span></button>
-        <button class="filter-tab">Teslime Hazır <span>5</span></button>
-        <button class="filter-tab">Teslim Edildi</button>
+
+        <button type="button" class="filter-tab active" data-status="all">
+            Tümü
+            <span>{{ $totalServices }}</span>
+        </button>
+
+        @foreach ($statusLabels as $status => $label)
+            <button
+                type="button"
+                class="filter-tab"
+                data-status="{{ $status }}"
+            >
+                {{ $label }}
+                <span>{{ $statusCounts[$status] }}</span>
+            </button>
+        @endforeach
+
     </div>
+
     <div class="toolbar-right">
-        <button class="btn-add">+ Yeni Servis</button>
+        <a href="{{ route('dashboard.create') }}" class="btn-add">
+            + Yeni Servis
+        </a>
     </div>
+
 </div>
 
+
+{{-- ================= SERVİS TABLOSU ================= --}}
+
 <div class="table-wrapper">
+
     <table class="custom-table service-table">
+
         <thead>
             <tr>
                 <th>Servis No</th>
@@ -93,446 +153,864 @@
                 <th class="text-right">İşlemler</th>
             </tr>
         </thead>
+
         <tbody>
-            <tr>
-                <td><span class="code">SRV-1045</span></td>
-                <td>
-                    <div class="product-cell">
-                        <div class="product-icon">AY</div>
-                        <div>
-                            <strong>Ahmet Yılmaz</strong>
-                            <span>0532 000 00 00</span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <strong class="cell-title">iPhone 13</strong>
-                    <span class="cell-sub">IMEI: 35•••••4821</span>
-                </td>
-                <td>Ekran kırık</td>
-                <td>Mehmet K.</td>
-                <td>28.09.2026</td>
-                <td><strong>₺1.850,00</strong></td>
-                <td><span class="status status-waiting">Bekliyor</span></td>
-                <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-            </tr>
 
-            <tr>
-                <td><span class="code">SRV-1044</span></td>
-                <td>
-                    <div class="product-cell">
-                        <div class="product-icon">EK</div>
-                        <div>
-                            <strong>Elif Kaya</strong>
-                            <span>0533 000 00 00</span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <strong class="cell-title">Lenovo ThinkPad E14</strong>
-                    <span class="cell-sub">SN: PF3•••92</span>
-                </td>
-                <td>Açılmıyor</td>
-                <td>Can D.</td>
-                <td>27.09.2026</td>
-                <td><strong>₺2.400,00</strong></td>
-                <td><span class="status status-progress">Devam Ediyor</span></td>
-                <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-            </tr>
+            @forelse ($services as $service)
 
-            <tr>
-                <td><span class="code">SRV-1043</span></td>
-                <td>
-                    <div class="product-cell">
-                        <div class="product-icon">MD</div>
-                        <div>
-                            <strong>Mustafa Demir</strong>
-                            <span>0534 000 00 00</span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <strong class="cell-title">Samsung Galaxy S22</strong>
-                    <span class="cell-sub">IMEI: 35•••••7710</span>
-                </td>
-                <td>Batarya değişimi</td>
-                <td>Mehmet K.</td>
-                <td>26.09.2026</td>
-                <td><strong>₺950,00</strong></td>
-                <td><span class="status status-ready">Teslime Hazır</span></td>
-                <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-            </tr>
+                <tr data-status="{{ $service->status }}">
 
-            <tr>
-                <td><span class="code">SRV-1040</span></td>
-                <td>
-                    <div class="product-cell">
-                        <div class="product-icon">ZA</div>
-                        <div>
-                            <strong>Zeynep Aslan</strong>
-                            <span>0535 000 00 00</span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <strong class="cell-title">HP LaserJet Pro</strong>
-                    <span class="cell-sub">SN: VNB•••15</span>
-                </td>
-                <td>Kağıt sıkışması</td>
-                <td>Can D.</td>
-                <td>24.09.2026</td>
-                <td><strong>₺600,00</strong></td>
-                <td><span class="status status-done">Teslim Edildi</span></td>
-                <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-            </tr>
+                    <td>
+                        <span class="code">
+                            {{ $service->service_no }}
+                        </span>
+                    </td>
 
-            <tr>
-                <td><span class="code">SRV-1038</span></td>
-                <td>
-                    <div class="product-cell">
-                        <div class="product-icon">BÇ</div>
-                        <div>
-                            <strong>Burak Çelik</strong>
-                            <span>0536 000 00 00</span>
+                    <td>
+                        <div class="product-cell">
+
+                            <div class="product-icon">
+                                {{ substr($service->customer_name ?? 'M', 0, 2) }}
+                            </div>
+
+                            <div>
+                                <strong>
+                                    {{ $service->customer_name ?? '-' }}
+                                </strong>
+
+                                <span>
+                                    {{ $service->customer_contact ?? '-' }}
+                                </span>
+                            </div>
+
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <strong class="cell-title">Xiaomi Redmi Note 11</strong>
-                    <span class="cell-sub">IMEI: 86•••••3302</span>
-                </td>
-                <td>Onarım ekonomik değil</td>
-                <td>Mehmet K.</td>
-                <td>22.09.2026</td>
-                <td><strong>₺0,00</strong></td>
-                <td><span class="status status-cancel">İptal</span></td>
-                <td class="text-right">
-                    <div class="table-actions">
-                        <button class="action-btn edit">Detay</button>
-                        <button class="action-btn edit">Düzenle</button>
-                        <button class="action-btn delete">Sil</button>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+
+                    <td>
+                        <strong class="cell-title">
+                            {{ $service->device->name ?? '-' }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ $service->fault->title ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $service->personel->fullname ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $service->date_of_entry
+                            ? \Carbon\Carbon::parse($service->date_of_entry)->format('d.m.Y')
+                            : '-' }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ₺{{ number_format($service->price ?? 0, 2, ',', '.') }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        <span class="status {{ $statusClasses[$service->status] ?? 'status-waiting' }}">
+                            {{ $statusLabels[$service->status] ?? $service->status }}
+                        </span>
+                    </td>
+
+                    <td class="text-right">
+
+                        <div class="table-actions">
+
+                            <a
+                                href="#"
+                                class="action-btn edit"
+                            >
+                                Detay
+                            </a>
+
+                            <a
+                                href="{{ route('dashboard.edit',$service) }}"
+                                class="action-btn edit"
+                            >
+                                Düzenle
+                            </a>
+
+                            <form
+                                 action="{{ route('dashboard.destroy', $service->id) }}"
+                                method="POST"
+                                onsubmit="return confirm('Bu servis kaydını silmek istediğinize emin misiniz?')"
+                            >
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="action-btn delete">
+                                    Sil
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            @empty
+
+                <tr>
+                    <td colspan="9" class="text-center">
+                        Henüz servis kaydı bulunmuyor.
+                    </td>
+                </tr>
+
+            @endforelse
+
         </tbody>
+
     </table>
+
 </div>
+
+
+{{-- ================= SAYFALAMA ================= --}}
 
 <div class="table-footer">
-    <span>5 kayıttan 1-5 arası gösteriliyor</span>
-    <nav class="pagination">
-        <button class="page-btn" disabled>‹</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">›</button>
-    </nav>
+
+    <span>
+        @if (method_exists($services, 'firstItem') && $services->total() > 0)
+            {{ $services->total() }} kayıttan
+            {{ $services->firstItem() }}-{{ $services->lastItem() }}
+            arası gösteriliyor
+        @else
+            {{ $serviceRows->count() }} kayıt gösteriliyor
+        @endif
+    </span>
+
+    @if (method_exists($services, 'links'))
+        <div class="pagination">
+            {{ $services->links() }}
+        </div>
+    @endif
+
 </div>
 
+
+{{-- ================= GRAFİKLER ================= --}}
+
 <div class="row pb-4">
-    <div class="col-md-6">
+
+    <div class="col-md-6 mb-3">
+
         <div class="chart-card">
-            <h3 class="chart-title">Aylık Arızalar</h3>
+
+            <h3 class="chart-title">Aylık Servisler</h3>
+
             <div class="bar-canvas">
                 <canvas id="myChart"></canvas>
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-md-6">
+
+    <div class="col-md-6 mb-3">
+
         <div class="chart-card">
+
             <h3 class="chart-title">Servis Durumu Dağılımı</h3>
+
             <div class="doughnut-wrap">
+
                 <div class="doughnut-canvas">
+
                     <canvas id="statusChart"></canvas>
+
                     <div class="doughnut-center">
                         <strong id="statusTotal">0</strong>
                         <span>Toplam Servis</span>
                     </div>
+
                 </div>
+
                 <ul class="doughnut-legend" id="statusLegend"></ul>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
 
-{{-- ===== GECİKMİŞ SERVİSLER UYARI BANDI ===== --}}
-<div class="svc-alert mb-4" role="alert">
-    <div class="svc-alert-icon" aria-hidden="true">!</div>
-    <div class="svc-alert-text">
-        <strong>7 günü aşan 12 servis kaydı var</strong>
-        <span>En eski kayıt 16 gündür bekliyor (SRV-0987). Müşterileri bilgilendirmeniz önerilir.</span>
-    </div>
-    <button type="button" class="svc-alert-btn">Kayıtları gör</button>
-</div>
 
-{{-- ===== SON AKTİVİTELER + HIZLI İŞLEMLER ===== --}}
+{{-- ================= GECİKMİŞ SERVİSLER ================= --}}
+
+@php
+    $overdueServices = $serviceRows->filter(function ($service) {
+        return $service->status !== 'delivered'
+            && \Carbon\Carbon::parse($service->date_of_entry)->diffInDays(now()) >= 7;
+    });
+
+    $oldestService = $overdueServices
+        ->sortBy('date_of_entry')
+        ->first();
+@endphp
+
+@if ($overdueServices->count() > 0)
+
+    <div class="svc-alert mb-4" role="alert">
+
+        <div class="svc-alert-icon">!</div>
+
+        <div class="svc-alert-text">
+
+            <strong>
+                7 günü aşan {{ $overdueServices->count() }} servis kaydı var
+            </strong>
+
+            <span>
+                En eski kayıt
+                {{ \Carbon\Carbon::parse($oldestService->date_of_entry)->diffInDays(now()) }}
+                gündür bekliyor
+                ({{ $oldestService->service_no }}).
+                Müşterileri bilgilendirmeniz önerilir.
+            </span>
+
+        </div>
+
+        <button
+            type="button"
+            class="svc-alert-btn"
+            id="showOverdue"
+        >
+            Kayıtları gör
+        </button>
+
+    </div>
+
+@endif
+
+
+{{-- ================= SON AKTİVİTELER + HIZLI İŞLEMLER ================= --}}
+
 <div class="row pb-4">
+
     <div class="col-md-6 mb-3 mb-md-0">
+
         <div class="chart-card">
+
             <h3 class="chart-title">Son Aktiviteler</h3>
+
             <ul class="svc-timeline">
-                <li>
-                    <span class="svc-dot svc-dot-success"></span>
-                    <div>
-                        <div class="svc-tl-title"><b>SRV-1043</b> teslime hazır yapıldı</div>
-                        <div class="svc-tl-meta">14:20 · Mehmet K.</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="svc-dot svc-dot-primary"></span>
-                    <div>
-                        <div class="svc-tl-title"><b>SRV-1044</b> yeni kayıt açıldı</div>
-                        <div class="svc-tl-meta">13:05 · Can D.</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="svc-dot svc-dot-warning"></span>
-                    <div>
-                        <div class="svc-tl-title"><b>SRV-1041</b> için parça bekleniyor</div>
-                        <div class="svc-tl-meta">11:42 · Mehmet K.</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="svc-dot svc-dot-success"></span>
-                    <div>
-                        <div class="svc-tl-title"><b>SRV-1040</b> müşteriye teslim edildi</div>
-                        <div class="svc-tl-meta">Dün 17:30 · Can D.</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="svc-dot svc-dot-danger"></span>
-                    <div>
-                        <div class="svc-tl-title"><b>SRV-1038</b> iptal edildi</div>
-                        <div class="svc-tl-meta">Dün 15:10 · Mehmet K.</div>
-                    </div>
-                </li>
+
+                @forelse ($serviceRows->sortByDesc('created_at')->take(5) as $service)
+
+                    <li>
+
+                        <span class="svc-dot
+                            {{ $service->status === 'delivered' ? 'svc-dot-success' :
+                                ($service->status === 'ready' ? 'svc-dot-primary' :
+                                ($service->status === 'continues' ? 'svc-dot-warning' : 'svc-dot-danger')) }}">
+                        </span>
+
+                        <div>
+
+                            <div class="svc-tl-title">
+                                <b>{{ $service->service_no }}</b>
+                                {{ $statusLabels[$service->status] ?? $service->status }}
+                            </div>
+
+                            <div class="svc-tl-meta">
+                                {{ $service->created_at?->format('d.m.Y H:i') ?? '-' }}
+                            </div>
+
+                        </div>
+
+                    </li>
+
+                @empty
+
+                    <li>Henüz aktivite bulunmuyor.</li>
+
+                @endforelse
+
             </ul>
+
         </div>
+
     </div>
+
 
     <div class="col-md-6">
+
         <div class="chart-card">
+
             <h3 class="chart-title">Hızlı İşlemler</h3>
+
             <div class="svc-actions">
-                <button type="button" class="svc-action svc-action-main">
+
+                <a
+                    href="{{ route('dashboard.create') }}"
+                    class="svc-action svc-action-main"
+                >
                     <b>Yeni servis kaydı</b>
                     <span>Cihaz ve müşteri bilgilerini girerek kayıt aç</span>
-                </button>
-                <button type="button" class="svc-action">
-                    <b>SMS gönder</b>
-                    <span>Müşteriyi bilgilendir</span>
-                </button>
-                <button type="button" class="svc-action">
-                    <b>Fiyat teklifi</b>
-                    <span>Teklif oluştur</span>
-                </button>
-                <button type="button" class="svc-action">
+                </a>
+
+                <a href="{{ route('dashboard.index') }}" class="svc-action">
+                    <b>Servis kayıtları</b>
+                    <span>Tüm servisleri görüntüle</span>
+                </a>
+
+                <a href="{{ route('dashboard.index') }}" class="svc-action">
                     <b>Servis sorgula</b>
-                    <span>IMEI veya seri no ile ara</span>
-                </button>
-                <button type="button" class="svc-action">
-                    <b>Rapor indir</b>
-                    <span>Aylık özet (PDF)</span>
-                </button>
+                    <span>Servis kayıtlarını incele</span>
+                </a>
+
+                <a href="{{ route('dashboard.index') }}" class="svc-action">
+                    <b>Raporlar</b>
+                    <span>Servis kayıtlarını görüntüle</span>
+                </a>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
 
-{{-- ===== FOOTER ===== --}}
+
+{{-- ================= FOOTER ================= --}}
+
 <footer class="svc-footer">
+
     <span>Servis Takip v1.0.0</span>
+
     <span class="svc-footer-status">
         <span class="svc-dot svc-dot-success" style="margin-top:0"></span>
-        Son yedekleme: 30.09.2026 03:00
+        Sistem aktif
     </span>
+
     <a href="mailto:destek@ornek.com">Destek</a>
+
 </footer>
 
-{{-- Yeni bölümlerin stilleri. İsterseniz ana CSS dosyanıza taşıyabilirsiniz. --}}
+
+{{-- ================= EK STİLLER ================= --}}
+
 <style>
-    /* Uyarı bandı */
+
     .svc-alert {
-        display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
         padding: 16px 20px;
         background: #fff7ed;
         border: 1px solid var(--warning, #d97706);
         border-radius: 16px;
     }
-    .svc-alert-icon {
-        flex: none; width: 36px; height: 36px; border-radius: 50%;
-        display: grid; place-items: center;
-        background: var(--warning, #d97706); color: #fff; font-weight: 700;
-    }
-    .svc-alert-text { flex: 1; min-width: 220px; }
-    .svc-alert-text strong { display: block; font-size: 15px; }
-    .svc-alert-text span { font-size: 13px; color: #6b7280; }
-    .svc-alert-btn {
-        padding: 8px 16px; font: inherit; font-size: 13px; font-weight: 500;
-        color: #fff; background: var(--warning, #d97706);
-        border: 0; border-radius: 8px; cursor: pointer;
-    }
-    .svc-alert-btn:hover { opacity: .9; }
 
-    /* Zaman çizgisi */
-    .svc-timeline { list-style: none; margin: 0; padding: 0; }
-    .svc-timeline li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; }
-    .svc-timeline li:last-child { padding-bottom: 0; }
-    .svc-timeline li::before {
-        content: ""; position: absolute; left: 5px; top: 16px; bottom: 0;
-        width: 2px; background: #e5e7eb;
+    .svc-alert-icon {
+        flex: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--warning, #d97706);
+        color: #fff;
+        font-weight: 700;
     }
-    .svc-timeline li:last-child::before { display: none; }
-    .svc-dot { flex: none; width: 12px; height: 12px; margin-top: 4px; border-radius: 50%; }
+
+    .svc-alert-text {
+        flex: 1;
+        min-width: 220px;
+    }
+
+    .svc-alert-text strong {
+        display: block;
+        font-size: 15px;
+    }
+
+    .svc-alert-text span {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .svc-alert-btn {
+        padding: 8px 16px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+        background: var(--warning, #d97706);
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .svc-timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .svc-timeline li {
+        position: relative;
+        display: flex;
+        gap: 14px;
+        padding-bottom: 18px;
+    }
+
+    .svc-timeline li:last-child {
+        padding-bottom: 0;
+    }
+
+    .svc-timeline li::before {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 16px;
+        bottom: 0;
+        width: 2px;
+        background: #e5e7eb;
+    }
+
+    .svc-timeline li:last-child::before {
+        display: none;
+    }
+
+    .svc-dot {
+        flex: none;
+        width: 12px;
+        height: 12px;
+        margin-top: 4px;
+        border-radius: 50%;
+    }
+
     .svc-dot-primary { background: var(--primary, #2563eb); }
     .svc-dot-success { background: var(--success, #059669); }
     .svc-dot-warning { background: var(--warning, #d97706); }
-    .svc-dot-danger  { background: var(--danger, #dc2626); }
-    .svc-tl-title { font-size: 14px; }
-    .svc-tl-title b { font-weight: 600; }
-    .svc-tl-meta { margin-top: 2px; font-size: 12px; color: #6b7280; }
+    .svc-dot-danger { background: var(--danger, #dc2626); }
 
-    /* Hızlı işlemler */
-    .svc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .svc-tl-title {
+        font-size: 14px;
+    }
+
+    .svc-tl-meta {
+        margin-top: 2px;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .svc-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
     .svc-action {
-        display: flex; flex-direction: column; gap: 4px;
-        padding: 16px; text-align: left; font: inherit; color: inherit;
-        background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
-        cursor: pointer; transition: border-color .15s, background .15s;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 16px;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        text-decoration: none;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: border-color .15s, background .15s;
     }
-    .svc-action:hover { border-color: #353535; background: #f9fafb; }
-    .svc-action b { font-size: 14px; font-weight: 600; }
-    .svc-action span { font-size: 12px; color: #6b7280; }
-    .svc-action-main { grid-column: 1 / -1; color: #fff; background: #353535; border-color: #353535; }
-    .svc-action-main span { color: inherit; opacity: .75; }
-    .svc-action-main:hover { background: #353535; opacity: .9; }
-    @@media (max-width: 480px) { .svc-actions { grid-template-columns: 1fr; } }
 
-    /* Footer */
-    .svc-footer {
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 12px 24px; flex-wrap: wrap;
-        margin-top: 8px; padding: 16px 0 24px;
-        border-top: 1px solid #e5e7eb;
-        font-size: 13px; color: #6b7280;
+    .svc-action:hover {
+        border-color: #353535;
+        background: #f9fafb;
     }
-    .svc-footer-status { display: inline-flex; align-items: center; gap: 8px; }
-    .svc-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-    .svc-footer a:hover { color: #353535; }
+
+    .svc-action b {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .svc-action span {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .svc-action-main {
+        grid-column: 1 / -1;
+        color: #fff;
+        background: #353535;
+        border-color: #353535;
+    }
+
+    .svc-action-main span {
+        color: inherit;
+        opacity: .75;
+    }
+
+    .svc-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px 24px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+        padding: 16px 0 24px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .svc-footer-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .svc-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .table-actions form {
+        display: inline-block;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    @media (max-width: 480px) {
+        .svc-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+
 </style>
+
+
+{{-- ================= JAVASCRIPT ================= --}}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ================= ARAMA =================
+
+    const searchInput = document.querySelector('input[name="search"]');
+
+    const tableRows = document.querySelectorAll('.service-table tbody tr[data-status]');
+
+    let activeStatus = 'all';
+
+    function filterServices() {
+
+        const searchValue = searchInput
+            ? searchInput.value.toLocaleLowerCase('tr')
+            : '';
+
+        tableRows.forEach(row => {
+
+            const rowStatus = row.dataset.status;
+
+            const matchesStatus =
+                activeStatus === 'all' || rowStatus === activeStatus;
+
+            const matchesSearch =
+                row.textContent.toLocaleLowerCase('tr').includes(searchValue);
+
+            row.style.display =
+                matchesStatus && matchesSearch ? '' : 'none';
+
+        });
+
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterServices);
+    }
+
+
+    // ================= DURUM FİLTRESİ =================
+
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+
+        tab.addEventListener('click', function () {
+
+            document.querySelectorAll('.filter-tab').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            this.classList.add('active');
+
+            activeStatus = this.dataset.status;
+
+            filterServices();
+
+        });
+
+    });
+
+
+    // ================= GECİKMİŞ SERVİSLER =================
+
+    const overdueButton = document.getElementById('showOverdue');
+
+    if (overdueButton) {
+
+        overdueButton.addEventListener('click', function () {
+
+            document.querySelectorAll('.filter-tab').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            activeStatus = 'all';
+
+            if (searchInput) {
+                searchInput.value = '';
+            }
+
+            tableRows.forEach(row => {
+
+                const dateCell = row.querySelector('td:nth-child(6)');
+
+                if (!dateCell) return;
+
+                const parts = dateCell.textContent.trim().split('.');
+
+                if (parts.length !== 3) return;
+
+                const entryDate = new Date(
+                    Number(parts[2]),
+                    Number(parts[1]) - 1,
+                    Number(parts[0])
+                );
+
+                const days = Math.floor(
+                    (new Date() - entryDate) / (1000 * 60 * 60 * 24)
+                );
+
+                row.style.display =
+                    row.dataset.status !== 'delivered' && days >= 7
+                        ? ''
+                        : 'none';
+
+            });
+
+        });
+
+    }
+
+
+    // ================= CHART.JS =================
+
+    if (typeof Chart === 'undefined') return;
+
     Chart.defaults.font.family = "'Inter', sans-serif";
 
     const css = getComputedStyle(document.documentElement);
-    const color = (name) => css.getPropertyValue(name).trim();
-    new Chart(document.getElementById('myChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-            datasets: [{
-                label: 'Arızalar',
-                data: [12, 19, 3, 5, 2, 3, 13, 9, 10, 5, 9, 11],
-                backgroundColor: '#353535',
-                hoverBackgroundColor: '#555',
-                borderRadius: 6,
-                borderSkipped: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
+
+    const color = name => css.getPropertyValue(name).trim();
+
+
+    // Aylık servis grafiği
+
+    const monthlyCanvas = document.getElementById('myChart');
+
+    if (monthlyCanvas) {
+
+        new Chart(monthlyCanvas, {
+
+            type: 'bar',
+
+            data: {
+                labels: [
+                    'Ocak', 'Şubat', 'Mart', 'Nisan',
+                    'Mayıs', 'Haziran', 'Temmuz', 'Ağustos',
+                    'Eylül', 'Ekim', 'Kasım', 'Aralık'
+                ],
+
+                datasets: [{
+                    label: 'Servisler',
+
+                    data: @json(
+                        collect(range(1, 12))->map(function ($month) use ($serviceRows) {
+                            return $serviceRows->filter(function ($service) use ($month) {
+                                return $service->date_of_entry
+                                    && \Carbon\Carbon::parse($service->date_of_entry)->month == $month;
+                            })->count();
+                        })->values()
+                    ),
+
+                    backgroundColor: '#353535',
+                    hoverBackgroundColor: '#555',
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#F1F5F9' },
-                    border: { display: false }
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 },
-                x: {
-                    grid: { display: false }
-                }
-            }
-        }
-    });
 
-    const statusData = [
-        { label: 'Bekliyor',      value: 56, color: color('--warning') },
-        { label: 'Devam Ediyor',  value: 8,  color: color('--info') },
-        { label: 'Teslime Hazır', value: 5,  color: color('--primary') },
-    ];
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        },
+                        grid: {
+                            color: '#F1F5F9'
+                        },
+                        border: {
+                            display: false
+                        }
+                    },
 
-    const total = statusData.reduce((sum, s) => sum + s.value, 0);
-    document.getElementById('statusTotal').textContent = total;
-
-    new Chart(document.getElementById('statusChart'), {
-        type: 'doughnut',
-        data: {
-            labels: statusData.map(s => s.label),
-            datasets: [{
-                data: statusData.map(s => s.value),
-                backgroundColor: statusData.map(s => s.color),
-                borderColor: '#fff',
-                borderWidth: 3,
-                hoverOffset: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '72%',
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (ctx) => {
-                            const pct = Math.round(ctx.parsed / total * 100);
-                            return ` ${ctx.label}: ${ctx.parsed} (%${pct})`;
+                    x: {
+                        grid: {
+                            display: false
                         }
                     }
                 }
             }
-        }
-    });
 
-    // Özel legend listesi
-    document.getElementById('statusLegend').innerHTML = statusData.map(s => `
-        <li>
-            <span class="legend-dot" style="background:${s.color}"></span>
-            <span class="legend-name">${s.label}</span>
-            <span class="legend-count">${s.value}</span>
-            <span class="legend-percent">%${Math.round(s.value / total * 100)}</span>
-        </li>
-    `).join('');
+        });
+
+    }
+
+
+    // Durum dağılımı grafiği
+
+    const statusData = [
+        {
+            label: 'Bekliyor',
+            value: @json($statusCounts['pending']),
+            color: color('--warning')
+        },
+        {
+            label: 'Devam Ediyor',
+            value: @json($statusCounts['continues']),
+            color: color('--info')
+        },
+        {
+            label: 'Teslime Hazır',
+            value: @json($statusCounts['ready']),
+            color: color('--primary')
+        },
+        {
+            label: 'Teslim Edildi',
+            value: @json($statusCounts['delivered']),
+            color: color('--success')
+        }
+    ];
+
+    const total = statusData.reduce((sum, item) => sum + item.value, 0);
+
+    const statusTotal = document.getElementById('statusTotal');
+
+    if (statusTotal) {
+        statusTotal.textContent = total;
+    }
+
+
+    const statusCanvas = document.getElementById('statusChart');
+
+    if (statusCanvas) {
+
+        new Chart(statusCanvas, {
+
+            type: 'doughnut',
+
+            data: {
+                labels: statusData.map(item => item.label),
+
+                datasets: [{
+                    data: statusData.map(item => item.value),
+
+                    backgroundColor: statusData.map(item => item.color),
+
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 6
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: context => {
+
+                                const percentage = total > 0
+                                    ? Math.round(context.parsed / total * 100)
+                                    : 0;
+
+                                return ` ${context.label}: ${context.parsed} (%${percentage})`;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        });
+
+    }
+
+
+    // Özel grafik açıklamaları
+
+    const statusLegend = document.getElementById('statusLegend');
+
+    if (statusLegend) {
+
+        statusLegend.innerHTML = statusData.map(item => {
+
+            const percentage = total > 0
+                ? Math.round(item.value / total * 100)
+                : 0;
+
+            return `
+                <li>
+                    <span class="legend-dot" style="background:${item.color}"></span>
+                    <span class="legend-name">${item.label}</span>
+                    <span class="legend-count">${item.value}</span>
+                    <span class="legend-percent">%${percentage}</span>
+                </li>
+            `;
+
+        }).join('');
+
+    }
+
+});
+
 </script>
 
 @endsection

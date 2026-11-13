@@ -65,6 +65,8 @@ class AuthController extends Controller
     if(!Hash::check($request->password, $user->password)){
           return back()->withErrors([
             'password'=>'şifre yanlış.',
+          ])->withInput([
+            'email'=>$request->email
           ]);
     }
     if($user->email_verified_at == null){

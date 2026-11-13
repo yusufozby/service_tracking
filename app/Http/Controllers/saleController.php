@@ -9,5 +9,6 @@ class saleController extends Controller
     public function index(){
         return view('sale.index');
     }
+
     //
 }

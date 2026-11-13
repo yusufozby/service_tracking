@@ -16,7 +16,6 @@ return new class extends Migration
             $table->text('name');
             $table->text('serial_no');
             $table->string('model')->nullable();
-            $table->foreignId('personel_id')->constrained('personels');
             $table->text('type');
             $table->enum('status',['active','passive','onService'])->default('active');
             $table->string('image')->nullable();

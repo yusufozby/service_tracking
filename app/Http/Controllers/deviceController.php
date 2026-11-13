@@ -63,7 +63,6 @@ public function createDevice(Request $request){
         'model'       => 'nullable|string|max:255',
         'type'        => 'nullable|string|max:255',
         'status'      => 'required|in:active,onService,passive',
-        'personel_id' => 'nullable|integer|exists:personels,id',
         'image'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
     ]);
     if($request->hasFile('image')){

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('message');
             $table->foreignId('user_id')->constrained('users');
+            $table->enum('status',['customer','income']);
+            $table->date('end_date');
         });
         //
     }

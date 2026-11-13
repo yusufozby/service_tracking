@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('device_id')->constrained('devices');
+
+            $table->foreignId('personel_id')->constrained('personels')->cascadeOnDelete();
+            $table->foreignId('device_id')->constrained('devices')->cascadeOnDelete();
             $table->enum('status',['pending','continues','ready','delivered']);
-            $table->string('service_no');
-            $table->string('fault');
-            $table->foreignId('personel_id')->constrained('personels');
+            $table->foreignId('fault_id')->constrained('faults')->cascadeOnDelete();
+            $table->string('service_no')->nullable()->unique();
             $table->date('date_of_entry');
-          $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 2);
         });
     }
 

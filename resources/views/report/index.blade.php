@@ -216,16 +216,8 @@
 
 .reports-page .report-filter-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px 20px;
-}
-
-/* Alt satır: Servis Durumu + Personel => %50 / %50 */
-.reports-page .report-filter-row-2 {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 20px;
-    margin-top: 16px;
 }
 
 .reports-page .report-form-group {
@@ -380,7 +372,7 @@
 .reports-page .report-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 900px;
+    min-width: 700px;
 }
 
 .reports-page .report-table th {
@@ -438,13 +430,6 @@
 .reports-page .cell-title {
     display: block;
     font-weight: 600;
-}
-
-.reports-page .cell-sub {
-    display: block;
-    margin-top: 1px;
-    color: var(--r-muted);
-    font-size: 12px;
 }
 
 /* ---------- STATUS BADGES ---------- */
@@ -536,7 +521,7 @@
 
 .reports-page .quick-reports-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
 }
 
@@ -640,7 +625,6 @@
 
     .reports-page .reports-stats,
     .reports-page .report-filter-grid,
-    .reports-page .report-filter-row-2,
     .reports-page .quick-reports-grid {
         grid-template-columns: 1fr;
     }
@@ -698,7 +682,7 @@
 
         <div class="reports-title">
             <h1>Raporlar</h1>
-            <p>Servis işlemlerinizi inceleyin, analiz edin ve raporlarınızı oluşturun.</p>
+            <p>İşlemlerinizi inceleyin, analiz edin ve raporlarınızı oluşturun.</p>
         </div>
 
         <div class="reports-header-actions">
@@ -725,7 +709,7 @@
             </div>
             <div class="report-stat-content">
                 <span class="report-stat-value">248</span>
-                <span class="report-stat-label">Toplam Servis</span>
+                <span class="report-stat-label">Toplam Kayıt</span>
             </div>
         </div>
 
@@ -780,20 +764,16 @@
         <div class="report-filter-header">
             <div>
                 <h2>Rapor Filtreleri</h2>
-                <p>Raporlamak istediğiniz servisleri filtreleyin.</p>
+                <p>Raporlamak istediğiniz kayıtları filtreleyin.</p>
             </div>
         </div>
 
-        {{-- Üst satır: 3 eşit sütun --}}
         <div class="report-filter-grid">
 
             <div class="report-form-group">
                 <label for="report-type">Rapor Türü</label>
                 <select id="report-type" class="report-form-control">
-                    <option value="service">Servis Raporu</option>
-                    <option value="personnel">Personel Raporu</option>
                     <option value="customer">Müşteri Raporu</option>
-                    <option value="vehicle">Araç Raporu</option>
                     <option value="income">Gelir Raporu</option>
                 </select>
             </div>
@@ -808,30 +788,14 @@
                 <input type="date" id="end-date" class="report-form-control" value="2026-10-08">
             </div>
 
-        </div>
-
-        {{-- Alt satır: %50 / %50 --}}
-        <div class="report-filter-row-2">
-
             <div class="report-form-group">
-                <label for="report-status">Servis Durumu</label>
+                <label for="report-status">Durum</label>
                 <select id="report-status" class="report-form-control">
                     <option value="all">Tüm Durumlar</option>
                     <option value="waiting">Bekliyor</option>
                     <option value="progress">Devam Ediyor</option>
-                    <option value="ready">Hazır</option>
                     <option value="done">Tamamlandı</option>
                     <option value="cancel">İptal</option>
-                </select>
-            </div>
-
-            <div class="report-form-group">
-                <label for="personnel">Personel</label>
-                <select id="personnel" class="report-form-control">
-                    <option value="all">Tüm Personel</option>
-                    <option>Mehmet Kaya</option>
-                    <option>Ali Çelik</option>
-                    <option>Hasan Yıldız</option>
                 </select>
             </div>
 
@@ -853,7 +817,7 @@
         <div class="report-result-header">
 
             <div class="report-result-title">
-                <h2>Servis Raporu</h2>
+                <h2>Rapor</h2>
                 <p>01 Ekim 2026 - 08 Ekim 2026</p>
             </div>
 
@@ -888,7 +852,7 @@
         <div class="report-summary">
 
             <div class="report-summary-item">
-                <span>Toplam Servis</span>
+                <span>Toplam Kayıt</span>
                 <strong>248</strong>
             </div>
 
@@ -922,13 +886,9 @@
 
                 <thead>
                     <tr>
-                        <th>Servis No</th>
+                        <th>Kayıt No</th>
                         <th>Tarih</th>
                         <th>Müşteri</th>
-                        <th>Araç</th>
-                        <th>Servis</th>
-                        <th>Personel</th>
-                        <th>Süre</th>
                         <th>Durum</th>
                         <th class="text-right">Tutar</th>
                     </tr>
@@ -936,22 +896,14 @@
 
                 <tbody>
 
-
-                    @foreach ($reports as  $report)
-                          <tr>
-                        <td><span class="code">{{ $report->title }}</span></td>
-                        <td>08.10.2026</td>
-                        <td><span class="cell-title">Ahmet Yılmaz</span></td>
-                        <td>
-                            <span class="cell-title">BMW 320i</span>
-                            <span class="cell-sub">34 ABC 123</span>
-                        </td>
-                        <td>Periyodik Bakım</td>
-                        <td>Mehmet Kaya</td>
-                        <td>1 saat</td>
-                        <td><span class="status status-progress">Devam Ediyor</span></td>
-                        <td class="text-right">₺4.500</td>
-                    </tr>
+                    @foreach ($reports as $report)
+                        <tr>
+                            <td><span class="code">{{ $report->title }}</span></td>
+                            <td>08.10.2026</td>
+                            <td><span class="cell-title">Ahmet Yılmaz</span></td>
+                            <td><span class="status status-progress">Devam Ediyor</span></td>
+                            <td class="text-right">₺4.500</td>
+                        </tr>
                     @endforeach
 
                 </tbody>
@@ -964,7 +916,7 @@
         {{-- FOOTER --}}
         <div class="report-result-footer">
 
-            <span>248 servisten 5 tanesi gösteriliyor</span>
+            <span>248 kayıttan 5 tanesi gösteriliyor</span>
 
             <div class="pagination">
                 <button class="page-btn" disabled>‹</button>
@@ -998,17 +950,8 @@
             <button class="quick-report-card">
                 <div class="quick-report-icon quick-report-icon-primary">📊</div>
                 <div class="quick-report-content">
-                    <strong>Aylık Servis Raporu</strong>
-                    <span>Aylık servis performansını görüntüle</span>
-                </div>
-                <span class="quick-report-arrow">→</span>
-            </button>
-
-            <button class="quick-report-card">
-                <div class="quick-report-icon quick-report-icon-success">✓</div>
-                <div class="quick-report-content">
-                    <strong>Personel Performansı</strong>
-                    <span>Personel bazlı servis performansı</span>
+                    <strong>Aylık Rapor</strong>
+                    <span>Aylık performansı görüntüle</span>
                 </div>
                 <span class="quick-report-arrow">→</span>
             </button>
@@ -1017,16 +960,16 @@
                 <div class="quick-report-icon quick-report-icon-warning">₺</div>
                 <div class="quick-report-content">
                     <strong>Gelir Raporu</strong>
-                    <span>Servis gelirlerini incele</span>
+                    <span>Gelirleri incele</span>
                 </div>
                 <span class="quick-report-arrow">→</span>
             </button>
 
             <button class="quick-report-card">
-                <div class="quick-report-icon quick-report-icon-info">🚗</div>
+                <div class="quick-report-icon quick-report-icon-success">✓</div>
                 <div class="quick-report-content">
-                    <strong>Araç Servis Geçmişi</strong>
-                    <span>Araç bazlı servis geçmişini görüntüle</span>
+                    <strong>Müşteri Raporu</strong>
+                    <span>Müşteri bazlı kayıtları görüntüle</span>
                 </div>
                 <span class="quick-report-arrow">→</span>
             </button>
